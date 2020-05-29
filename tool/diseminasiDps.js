@@ -1,10 +1,6 @@
 const keys = require('../app/config/keys');
-
-// const accountSid = 'AC664a4d430f76c95f1087b5f7a9f34759'; 
-// const authToken = '319f257a2ac633449f4c5258bca7ec4a'; 
-
 const accountSid = 'ACbd694c940698af960c69d4ed424a9b50'; 
-const authToken = '40d09861d3cb1febf29f3153f59d818a'; 
+const authToken = '3a959f57035d4ddd37ac5770f4cd76d1'; 
 const client = require('twilio')(accountSid, authToken);
 
 
@@ -78,8 +74,8 @@ function pushNotif(data){
         message: msgPushNotif,
         url: 'https://peringatandini.site',
         // ttl: req.body.ttl,
-        icon: 'https://peringatandini.site/images/favicon.png',
-        image: 'https://peringatandini.site/images/favicon.png',
+        icon: 'https://peringatandini.site/images/warning.png',
+        // image: 'https://peringatandini.site/images/favicon.png',
         badge: 'https://peringatandini.site/images/favicon.png',
         tag: 'https://peringatandini.site/images/favicon.png'
     };

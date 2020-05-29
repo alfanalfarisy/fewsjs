@@ -1,5 +1,4 @@
 var express = require('express');
-var mongoose = require('mongoose');
 var router = express.Router();
 //models
 const DpsMain = require('../models/dpsMain');
@@ -7,7 +6,7 @@ const DpsMainTes = require('../models/dpsMainTes');
 const Users = require('../models/users');
 const DpcdMain = require('../models/dpcdMain');
 const DataSite = require('../models/dataprofilessite');
-const Subscription = mongoose.model('Subscribers');
+
 const DpsMainStream = DpsMainTes.watch();
 //mqtt
 var mqtt = require('mqtt')

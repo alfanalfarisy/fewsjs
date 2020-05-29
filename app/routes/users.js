@@ -2,6 +2,8 @@ var express = require('express');
 var crypto = require('crypto');
 var User = require('../models/users');
 var Auth_mdw = require('../middlewares/auth');
+var mongoose = require('mongoose');
+const Subscription = mongoose.model('Subscribers');
 
 var router = express.Router();
 var secret = 'projek20';
@@ -287,5 +289,21 @@ router.post('/add',function (req, res, next){
 //         });
 //     });
 // });
+    router.post('/subscribe', (req, res) => {
+        const subscriptionModel = new Subscription(req.body);
+        subscriptionModel.save((err, subscription) => {
+            if (err) {
+                console.error(`Error occurred while saving subscription. Err: ${err}`);
+                res.status(500).json({
+                    error: 'Technical error occurred'
+                });
+            } else {
+                res.json({
+                    data: 'Subscription saved.'
+                });
+            }
+        });
+    });
+
 
 module.exports = router;

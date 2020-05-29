@@ -65,7 +65,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 function saveSubscription(subscription) {
     let xmlHttp = new XMLHttpRequest();
     //put here API address
-    xmlHttp.open("POST", "data/subscribe");
+    xmlHttp.open("POST", "users/subscribe");
     xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState != 4) return;
