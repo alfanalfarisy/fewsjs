@@ -1,4 +1,4 @@
-const keys = require('../../fews/config/keys');
+const keys = require('../fews/config/keys');
 
 // const accountSid = 'AC664a4d430f76c95f1087b5f7a9f34759'; 
 // const authToken = '319f257a2ac633449f4c5258bca7ec4a'; 
