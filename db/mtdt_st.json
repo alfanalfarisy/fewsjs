@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5e0ca211caeb03e08d78f579"},"site":{"$numberLong":"221"},"pos":"katulampa","lat":"-6.423670","long":"106.817817","th":[250,150,80]}
+{"_id":{"$oid":"5e0ca211caeb03e08d78f57a"},"site":{"$numberLong":"222"},"pos":"depok","lat":"-6.633126","long":"106.836611","th":[350,270,200]}
+{"_id":{"$oid":"5e0ca211caeb03e08d78f57b"},"site":{"$numberLong":"223"},"pos":"manggarai","lat":"-6.207530","long":"106.849042","th":[950,850,750]}
+{"_id":{"$oid":"5ebbf1897fce40c9aeafc54a"},"site":{"$numberLong":"331"},"pos":"wawar","lat":"-7.393126","long":"109.496611","th":[600,400,200]}

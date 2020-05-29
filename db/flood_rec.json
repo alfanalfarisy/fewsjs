@@ -1,0 +1,1 @@
+{"_id":{"$oid":"5eb70f71fb9ab7114f347265"},"site":[221],"tma":[24],"vair":[1.4],"ich":[22],"dt":{"$date":"2020-05-09T20:15:45.117Z"},"kondisi":"hujan lebat","status":"siaga3","createdAt":{"$date":"2020-05-09T20:15:45.128Z"},"updatedAt":{"$date":"2020-05-09T20:15:45.128Z"},"__v":0}

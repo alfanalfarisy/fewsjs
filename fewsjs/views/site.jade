@@ -1,0 +1,194 @@
+extends layout/base
+block content
+	.row
+		.col-8
+		
+			.card.card-primary.card-outline
+				.card-header(style="background-color:white;")
+					.row
+						.col-6.mt-2
+							i.far.fa-chart-bar
+								strong CHART REALTIME 
+									span#siteName
+						.col-6
+							.chose.pull-right
+								input(type='date').mb-2#dateReq
+								input(type='submit' value='GET').btn.btn-light#getBtn
+								button.btn.btn-tool(data-card-widget="collapse")
+									i.fas.fa-minus
+								button.btn.btn-tool(type="button",data-toggle='modal', data-target='#myModal')
+									i.fas.fa-question
+				.card-body
+					.row
+						.col-12
+							#chart(style="width:100%; height:400px")
+					.row
+						.col-12
+							.row
+								.col-md-4.col-sm-4.col-4
+									.info-box
+										span.info-box-icon.bg-warning
+											i.fas.fa-water
+										.info-box-content
+											span.info-box-text TMA
+											span.info-box-number#postma
+											span.description-percentage.text-success
+												i.fas.fa-caret-up
+
+								.col-md-4.col-sm-4.col-4
+									.info-box
+										span.info-box-icon.bg-info
+											i.fas.fa-tint
+										.info-box-content
+											span.info-box-text Debit
+											span.info-box-number#posvair
+											span.description-percentage.text-success
+												i.fas.fa-caret-up
+
+								.col-md-4.col-sm-4.col-4
+									.info-box
+										span.info-box-icon.bg-success
+											i.fas.fa-cloud-showers-heavy
+										.info-box-content
+											span.info-box-text CH
+											span.info-box-number#posch
+											span.description-percentage.text-success
+												i.fas.fa-caret-up
+		
+			.card.card-primary.card-outline
+				.card-header
+					h5.card-title
+						strong REALTIME UPDATE TABLE
+					.card-tools
+						button.btn.btn-tool(type="button",data-toggle='modal', data-target='#myModal')
+							i.fas.fa-question
+				table(cellpadding="100").table.table-responsive.table-bordered
+					tbody
+						tr
+							thead.thead-dark
+								th.dt time
+						tr
+							thead.thead-dark
+								th.tma TMA
+						tr
+							thead.thead-dark
+								th.vair Laju Air
+						tr
+							thead.thead-dark
+								th.ch CH
+		.col-4
+			.card.card-outline.card-primary
+				.card-header
+					h5.card-title 
+						strong INFORMASI SITE
+					.card-tools
+						button.btn.btn-tool(data-card-widget="collapse")
+							i.fas.fa-minus
+				.card-body(style="")
+					table.table
+						tr
+							td Status Siaga  
+							td#sttsTma
+						tr
+							td Kondisi Lapangan  
+							td#sttsIch
+						tr
+							td Nilai ICH  
+							td#nilaiIch
+						tr
+							td TMA Valid Record 
+							td#tmaDate
+						tr
+							td CH Valid Record 
+							td#chDate
+						tr
+							td Vair Valid Record 
+							td#vairDate
+		
+			.card.card-primary.card-outline
+				.card-header
+					h5.card-title 
+						strong Location Point
+					.card-tools.text-center
+						button.btn.btn-tool.float-right(type='button', data-card-widget='collapse')
+							i.fas.fa-minus
+				.card-body
+					#map
+						#mapid(style="width:100%; height:400px")
+	
+		
+		
+
+	#myModal.modal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					| Threshold
+				.modal-body
+					img(src="/images/info.png" width="100%")
+				.modal-footer
+					button.btn.btn-danger(type='button', data-dismiss='modal') Close
+	
+
+block script
+	script.
+		var siteReq= !{siteReq};
+		var result= !{results};
+		var dataRes=result.dataRes
+		var stMd=result.stMd[0]
+		var socket = io.connect(BASE_URL);
+		
+	script.
+		var date = $('#dateReq').val();
+		socket.emit('beranda',{date:date,site:siteReq,status:'connect'})
+		function lastrecord(dataRes){
+			$("#postma").html(dataRes[0].tma[0]);
+			$("#posvair").html(dataRes[0].vair[0]);
+			$("#posch").html(dataRes[0].ch[0]);
+		}
+
+		socket.emit('sttsValid',{status:'connect',siteReq:siteReq})
+	
+		var sttsTma = statusTma(dataRes[0].tma[0],stMd.th[0],stMd.th[1],stMd.th[2])
+		var ichVal = ich(dataRes)
+		var sttsIch = statusIch(ichVal)
+
+		$('#sttsIch').text(sttsIch)
+		$('#sttsTma').text(sttsTma)
+		$('#nilaiIch').text(ichVal+'mm (1 jam terkahir)')
+		$('#siteName').text(stMd.pos.toUpperCase())
+
+
+		tabell(dataRes,stMd.th[0],stMd.th[1],stMd.th[2])
+		lastrecord(dataRes)
+		plotMap(stMd.pos,siteReq,stMd.lat,stMd.long,dataRes[0].tma[0],dataRes[0].vair[0],dataRes[0].ch[0],greenIcon)
+		socket.on('berandaData',function(msg){
+			dataRes = msg.data.dataRes
+			lastrecord(dataRes)
+			tabell(dataRes,stMd.th[0],stMd.th[1],stMd.th[2])
+
+			plotMap(stMd.pos,siteReq,stMd.lat,stMd.long,dataRes[0].tma[0],dataRes[0].vair[0],dataRes[0].ch[0],greenIcon)
+			
+			var sttsTma = statusTma(dataRes[0].tma[0],stMd.th[0],stMd.th[1],stMd.th[2])
+			var ichVal = ich(dataRes)
+			var sttsIch = statusIch(ichVal)
+			$('#sttsIch').text(sttsIch)
+			$('#sttsTma').text(sttsTma)
+			$('#nilaiIch').text(ichVal+'mm (1 jam terkahir)')
+			$('#siteName').text(stMd.pos.toUpperCase())			
+
+			socket.emit('beranda',{date:date,site:siteReq,status:'connect'})
+
+		})
+		$('#getBtn').click(function(){
+			
+			socket.emit('beranda',{date:date,site:siteReq,status:'req'})
+
+		})
+
+		socket.on('sttsValidData',(msg)=>{
+			$('#tmaDate').text(msg.tma.dt)
+			$('#chDate').text(msg.ch.dt)
+			$('#vairDate').text(msg.vair.dt)
+		})
+

@@ -1,0 +1,99 @@
+extends layout/base
+block content   
+    section.content
+            .card.card-primary.card-outline
+                .card-header(style="background-color:white;")
+                    h5 Data Pengamatan Sungai
+                .card-body 
+                    .row          
+                        .col-md-4
+                            .form-group
+                                label(for="startDate").col-md-12.control-label Start Date
+                                .col-md-12
+                                    input(type="date", name="startDate", id="startDate").form-control
+                            .form-group
+                                label(for="endDate").col-md-12.control-label End Date
+                                .col-md-12
+                                    input(type="date", name="endDate", id="endDate").form-control
+                            //- .row
+                            .form-group
+                                label(for="valueStart").col-md-4.control-label Value Start
+                                label(for="valueEnd").col-md-4.control-label Value End
+                                .row(style="margin:0px;")
+                                    .col-md-4
+                                        input(type="text", name="valueStart", id="valueStart").form-control
+                                    .col-md-4
+                                        input(type="text", name="valueEnd", id="valueEnd").form-control
+                                    .col-md-3
+                                        select.form-control(id="valueChoose", name="valueChoose")
+                                            option(value="tma") TMA
+                                            option(value="vair") LAJU
+                                            option(value="ch") CH
+                            .form-group
+                                .row(style="margin:0px;")
+                            
+                                    label(for="siteChoose").col-md-12.control-label Site
+                                    .col-md-6
+
+                                        select.custom-select.form-control#siteChoose
+                                            for site in dataSite
+                                                option(value="#{site.site}") #{site.pos}
+                                    .col-sm-6
+                                        input(type="submit" value="Search").btn.btn-primary.form-control#btnSearch
+                            //- .row(style="margin:0px")
+                            //-     .col-md-12
+                            //-         input(type="submit" value="Download")#export.btn.btn-primary.form-control.mb-2
+                        .col-md-8
+                            .card(style="padding:10px")
+                                table.dataTable.table-striped(style="width:100%")
+
+           
+
+block script
+    //- script(src='/js/tableData.js')
+    script.
+        var socket=io.connect(BASE_URL)
+        var dataDps= !{results}.dps
+        var dataSite= !{results}.dataSite
+        console.log(dataDps)
+        
+        var sd = $("#startDate").val('2019-12-01');
+        var ed = $("#endDate").val('2020-12-01');
+        var vs = $("#valueStart").val('0');
+        var ve = $("#valueEnd").val('999');
+        var vc = $("#valueChoose").val('tma')
+
+
+        function kodest(kodeSite){
+            var st;
+            dataSite.forEach((data)=>{
+                if(data.site==kodeSite){
+                    st = data.pos 
+                }
+            })
+            return st
+        }
+
+        plotTblDps(dataDps)
+        $('#btnSearch').click(function(){
+            var ds = $("#startDate").val();
+            var de = $("#endDate").val();
+            var vs = $("#valueStart").val();
+            var ve = $("#valueEnd").val();
+            var vc = $("#valueChoose").val();
+            var site = $("#siteChoose").val();
+            console.log('tes')
+            socket.emit('reqSearch',{ds:ds,de:de,vs:vs,vc:vc,ve:ve,site:site,id:socket.id})
+            
+        })            
+        socket.on('dataDpsReq',function(msg){
+            if(msg.resp.length==0){
+                alert("Data DPS tidak ditemukan!");
+            }
+            if(msg!='connected'){
+                dataDps=msg.resp
+            }
+
+            plotTblDps(dataDps)
+
+        })

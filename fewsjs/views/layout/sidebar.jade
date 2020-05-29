@@ -1,0 +1,87 @@
+
+aside.main-sidebar.sidebar-dark-light.elevation-4
+  a.brand-link(href='/')
+    img.brand-image.img-circle.elevation-3(src='/images/favicon.png', alt='', style='opacity: .8')
+    span.brand-text.font-weight-light FEWS-STMKG
+  .sidebar
+    .user-panel.mt-3.pb-3.mb-3.d-flex
+      .image
+        img.img-circle.elevation-2(src='/images/alfan.jpg', alt='User Image')
+      .info
+        a.d-block(href='https://twitter.com/alfanalfaris') Alfan Alfarisy
+    nav.mt-2
+      ul.nav.nav-pills.nav-sidebar.flex-column.nav-child-indent(data-widget='treeview', role='menu', data-accordion='false')
+        li.nav-item
+          a#linknavbarhome.nav-link(href='/')
+            i.nav-icon.fas.fa-home
+            p.text Home
+        li.nav-item.has-treeview
+          a#siteoption.nav-link(href='')
+            i.nav-icon.fas.fa-map-marker
+            p
+              | SITE
+              i.right.fas.fa-angle-left
+          ul.nav.nav-treeview
+            li.nav-item
+              a#linknavbarsitea.nav-link(href="/site/331")
+                i.far.fa-circle.nav-icon
+                p Wawar
+           ul.nav.nav-treeview
+            li.nav-item
+              a#linknavbarsitea.nav-link(href="/site/221")
+                i.far.fa-circle.nav-icon
+                p Katulampa
+            li.nav-item
+              a#linknavbarsiteb.nav-link(href="/site/222")
+                i.far.fa-circle.nav-icon
+                p Depok
+            li.nav-item
+              a#linknavbarsitec.nav-link(href="/site/223")
+                i.far.fa-circle.nav-icon
+                p Manggarai
+
+        li.nav-item.has-treeview#adminNav
+          a#admin.nav-link(href='')
+            i.nav-icon.fas.fa-tachometer-alt
+            p
+              | ADMIN
+              i.right.fas.fa-angle-left
+          ul.nav.nav-treeview
+            li.nav-item
+              a#linknavbargetdata.nav-link(href="/admin/data")
+                i.nav-icon.fas.fa-database
+                p All Data
+            li.nav-item
+              a#linknavbarsiteb.nav-link(href="/admin/qc")
+                i.nav-icon.fas.fa-chart-line
+                p Quality Control
+            li.nav-item
+              a#linknavbarsitec.nav-link(href="/admin/broadcast")
+                i.nav-icon.fas.fa-tools
+                p Broadcast
+            li.nav-item
+              a#linknavbarusers.nav-link(href="/users")
+                i.nav-icon.far.fa-image
+                p User
+        li.nav-item
+          a#linknavbardatadps.nav-link(href="/data-dps")
+            i.nav-icon.fas.fa-database
+            p.text Data DPS
+        li.nav-item
+          a#linknavbarloc.nav-link(href="/loc")
+            i.nav-icon.fas.fa-map-marked-alt
+            p.text Location
+        li.nav-item
+          a#linknavbarcuaca.nav-link(href="/weather")
+            i.nav-icon.fas.fa-cloud
+            p.text Cuaca
+        li.nav-item
+          a#linknavbaracc.nav-link(href="/users")
+            i.nav-icon.far.fa-image
+            p.text Account
+        li.nav-item
+          a#linknavbarabout.nav-link(href="/about")
+            i.nav-icon.fas.fa-address-card
+            p.text About
+script.
+  if(!{admin}) {$('#adminNav').show();$('#linknavbaracc,#linknavbardatadps').hide()}else{$('#adminNav').hide()}

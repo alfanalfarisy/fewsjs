@@ -1,0 +1,2 @@
+{"_id":{"$oid":"5e905448fdf8700e53c554d3"},"username":"anonim","password":"anonim","email":"anonim@gmail.com","no":"85233333656","firstname":"anonim","lastname":"anonim","admin":false,"createdAt":{"$date":"2020-04-10T11:11:04.771Z"},"updatedAt":{"$date":"2020-05-26T23:30:39.939Z"},"__v":0}
+{"_id":{"$oid":"5eabec6378dc2550db2b2cba"},"username":"admin","email":"admin@gmail.com","password":"admin123","firstname":"admin","lastname":"admin","no":"85233333656","admin":true,"createdAt":{"$date":"2020-05-01T09:31:15.117Z"},"updatedAt":{"$date":"2020-05-20T11:38:14.216Z"},"__v":0}
