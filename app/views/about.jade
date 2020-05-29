@@ -1,0 +1,168 @@
+extends layout/base
+block content
+	.card.card-solid
+		.card-header
+			h3 Our Team
+		.card-body.pb-0
+			.row.d-flex.align-items-stretch
+				.col-12.col-sm-12.col-md-4.d-flex.align-items-stretch
+					.card
+						.card-header.bg-transparent.border-light.text-muted
+							| Communication and Information
+						.card-body.pt-0
+							.row
+								.col-7
+									h2.lead
+										b Alfan Alfarisy
+									p.text-muted.text-sm
+										b Tugas: 
+										|  Sistem Informasi Flood Early Warning Sistem
+									ul.ml-4.mb-0.fa-ul.text-muted
+										li.small
+											span.fa-li
+												i.fas.fa-lg.fa-building
+											|  Sekolah Tinggi Meteorologi Klimatologi dan Geofisika
+										li.small
+											span.fa-li
+												i.fas.fa-graduation-cap
+											|  Instrumentasi MKG
+										li.small
+											span.fa-li
+												i.fas.fa-lg.fa-phone
+											|  Phone #: +62 852-33333-656
+								.col-5.text-center
+									img.img-circle.img-fluid(src='images/alfan.jpg', alt='')
+						.card-footer
+							.text-right
+								button.btn.btn-primary(type='button', data-toggle='modal', data-target='#profilealfan')
+									| View Profile
+				.col-12.col-sm-6.col-md-4.d-flex.align-items-stretch
+					.card
+						.card-header.bg-transparent.border-light.text-muted
+							| Site System Control 
+						.card-body.pt-0
+							.row
+								.col-7
+									h2.lead
+										b Bhakti Fajar Firmansya
+									p.text-muted.text-sm
+										b Tugas: 
+										|  Sistem Monitoring Data Flood Early Warning Sistem
+									ul.ml-4.mb-0.fa-ul.text-muted
+										li.small
+											span.fa-li
+												i.fas.fa-lg.fa-building
+											|  Sekolah Tinggi Meteorologi Klimatologi dan Geofisika
+										li.small
+											span.fa-li
+												i.fas.fa-graduation-cap
+											|  Instrumentasi MKG
+										li.small
+											span.fa-li
+												i.fas.fa-lg.fa-phone
+											|  Phone #: +62 852-33333-656
+								.col-5.text-center
+									img.img-circle.img-fluid(src='images/bhakti.jpg', alt='')
+						.card-footer
+							.text-right
+								button.btn.btn-primary(type='button', data-toggle='modal', data-target='#profilebhakti')
+									| View Profile
+				.col-12.col-sm-6.col-md-4.d-flex.align-items-stretch
+					.card
+						.card-header.bg-transparent.border-light.text-muted
+							| Power Supply Site Control
+						.card-body.pt-0
+							.row
+								.col-7
+									h2.lead
+										b Arif Nurkhamdi
+									p.text-muted.text-sm
+										b Tugas: 
+										|  Sistem Monitoring Power Supply
+									ul.ml-4.mb-0.fa-ul.text-muted
+										li.small
+											span.fa-li
+												i.fas.fa-lg.fa-building
+											|  Sekolah Tinggi Meteorologi Klimatologi dan Geofisika
+										li.small
+											span.fa-li
+												i.fas.fa-graduation-cap
+											|  Meteorologi
+										li.small
+											span.fa-li
+												i.fas.fa-lg.fa-phone
+											|  Phone #: +62 852-33333-656
+								.col-5.text-center
+									img.img-circle.img-fluid(src='images/khamdi.jpg', alt='')
+						.card-footer
+							.text-right
+								button.btn.btn-primary(type='button', data-toggle='modal', data-target='#profilekhamdi')
+									| View Profile
+		// /.card-body <
+	// The Modal
+	#profilealfan.modal
+		.modal-dialog
+			.modal-content
+				// Modal Header
+				.modal-header
+					h4.modal-title Alfan Alfarisy
+					button.close(type='button', data-dismiss='modal') ×
+				// Modal body
+				.modal-body
+					| Soon..
+				// Modal footer
+				.modal-footer
+					button.btn.btn-primary(type='button', data-dismiss='modal') Close
+	// The Modal
+	#profilebhakti.modal
+		.modal-dialog
+			.modal-content
+				// Modal Header
+				.modal-header
+					h4.modal-title Bhaktit Fajar Firmansyah
+					button.close(type='button', data-dismiss='modal') ×
+				// Modal body
+				.modal-body
+					| Soon..
+				// Modal footer
+				.modal-footer
+					button.btn.btn-primary(type='button', data-dismiss='modal') Close
+	// The Modal
+	#profilekhamdi.modal
+		.modal-dialog
+			.modal-content
+				// Modal Header
+				.modal-header
+					h4.modal-title Arif Nurkhamdi
+					button.close(type='button', data-dismiss='modal') ×
+				// Modal body
+				.modal-body
+					| Soon..
+				// Modal footer
+				.modal-footer
+					button.btn.btn-primary(type='button', data-dismiss='modal') Close
+
+	.card.card-primary.card-outline.card-outline-tabs
+			.card-header.p-0.border-bottom-0
+				ul#custom-tabs-three-tab.nav.nav-tabs(role='tablist')
+					li.nav-item
+						a#custom-tabs-three-home-tab.nav-link.active(data-toggle='pill', href='#custom-tabs-three-home', role='tab', aria-controls='custom-tabs-three-home', aria-selected='false') STMKG
+					li.nav-item
+						a#custom-tabs-three-profile-tab.nav-link(data-toggle='pill', href='#custom-tabs-three-profile', role='tab', aria-controls='custom-tabs-three-profile', aria-selected='false') FEWS
+					li.nav-item
+						a#custom-tabs-three-messages-tab.nav-link(data-toggle='pill', href='#custom-tabs-three-messages', role='tab', aria-controls='custom-tabs-three-messages', aria-selected='false') Contact Us
+			.card-body
+				#custom-tabs-three-tabContent.tab-content
+					#custom-tabs-three-home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='custom-tabs-three-home-tab')
+
+					#custom-tabs-three-profile.tab-pane.fade(role='tabpanel', aria-labelledby='custom-tabs-three-profile-tab')
+							p STMKG – Perguruan tinggi di Kota Tangerang Selatan, Banten.
+							p Alamat: Jl. Perhubungan I No. 5, Pondok Betung, Pondok Aren, Pd. Betung, Tangerang Selatan, Kota Tangerang Selatan, Banten 15221
+								br
+								| Provinsi : Banten
+							p
+								strong
+									a(href='#') admin@stmkg.ac.id
+								
+								|Telepon: (021) 73691621
+					#custom-tabs-three-messages.tab-pane.fade(role='tabpanel', aria-labelledby='custom-tabs-three-messages-tab')

@@ -1,0 +1,120 @@
+html
+	head
+		meta(charset='UTF-8')
+		title FEWS | Log in
+		meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
+		link(href='/bootstrap/dist/css/bootstrap.css', rel='stylesheet', type='text/css')
+		link(href='/font-awesome/css/fontawesome.min.css', rel='stylesheet', type='text/css')
+		link(href='/adminlte/dist/css/adminlte.min.css', rel='stylesheet', type='text/css')
+		link(href='/adminlte/plugins/iCheck/square/blue.css', rel='stylesheet', type='text/css')
+	body(style='background-color:#d2d6de')
+			.col-md-4(style='margin: 0 auto;')
+				.card
+					.card-header
+						a(href='/')
+							.text-center
+								b FEWS STMKG
+					// /.card-header
+					.card-body
+						- if (messages.msg_error)
+							.alert.alert-danger.alert-dismissable
+								button.close(type='button', data-dismiss='alert', aria-hidden='true') ×
+								| !{messages.msg_error}
+						- if (messages.msg_info)
+							.alert.alert-success.alert-dismissable
+								button.close(type='button', data-dismiss='alert', aria-hidden='true') ×
+								| #{messages.msg_info}
+						form(action="/users/add", method="POST" name='registration').form-horizontal
+							.form-group
+								label(for="username").col-md-6.control-label Username*
+								.col-md-12
+									input(type="text", name="username", id="username", value="#{ (username) ? username : '' }").form-control
+							.form-group
+								label(for="email").col-md-6.control-label E-Mail*
+								.col-md-12
+									input(type="text", name="email", id="email", value="#{ (email) ? email : '' }").form-control
+							.form-group
+								label(for="firstname").col-md-6.control-label Nama Depan*
+								.col-md-12
+									input(type="text", name="firstname", id="firstname", value="#{ (firstname) ? firstname : '' }").form-control
+							.form-group
+								label(for="lastname").col-md-6.control-label Nama Belakang
+								.col-md-12
+									input(type="text", name="lastname", id="lastname", value="#{ (lastname) ? lastname : '' }").form-control
+							.form-group
+								label(for="kontak").col-md-6.control-label Nomor Handphone/Whatsapp*
+								.col-md-12
+									.input-group
+										.input-group-text +62
+										input(type="text", name="kontak", id="kontak", value="#{ (kontak) ? kontak : '' }").form-control
+							.form-group
+								label(for="password").col-md-6.control-label Password*
+								.col-md-12
+									input(type="text", name="password", id="password", value="#{ (password) ? password : '' }").form-control
+							.form-group
+								label(for="passwordAgain").col-md-6.control-label Password*
+								.col-md-12
+									input(type="text", name="passwordAgain", id="passwordAgain", value="#{ (passwordAgain) ? passwordAgain : '' }").form-control
+							.form-group
+								.col-sm-offset-3.col-sm-6
+									button(type="submit").btn.btn-primary
+										| &nbsp; SIGNUP
+									| &nbsp;
+									a(href="login").btn.btn-danger LOGIN
+
+					// /.card-body
+				// /.card
+	// /.content
+	script(src='/adminlte/plugins/jquery/jquery.min.js')
+	script(src='/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js', type='text/javascript')
+	script(src='/adminlte/plugins/iCheck/icheck.min.js', type='text/javascript')
+	script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.js')
+	script(type='text/javascript', src="/jquery/dist/jquery.validate.min.js") 
+	script(type='text/javascript', src="/jquery/dist/additional-methods.min.js")
+	script.
+		$(function() {
+			$.validator.setDefaults({
+				errorClass: 'text-danger',
+				errorPlacement: function(error, element) {
+					if(element.parent('.input-group').length) {
+						error.insertAfter(element.parent());
+					} else {
+						error.insertAfter(element);
+						}
+				}
+			})
+
+			$("form[name='registration']").validate({
+				rules: {
+					username: {required: true,minlength: 8},
+					firstname: "required",
+					kontak: {required:true, number:true, minlength: 11, maxlength: 11},
+					email: {required: true,email: true},
+					password: {required: true,minlength: 8},
+					passwordAgain:{
+						equalTo:"#password"
+					}
+			},
+
+			messages: {
+				firstname: "Please enter your firstname",
+				lastname: "Please enter your lastname",
+				password: {
+					required: "Please provide a password",
+					minlength: "Your password must be at least 8 characters long"
+				},
+				email: "Please enter a valid email address",
+				kontak: "Please enter a valid number phone"
+			},
+			submitHandler: function(form) {
+				form.submit();
+			},
+
+			highlight: function(element) {
+			$(element).css('background', '#ffdddd');
+			},
+			unhighlight: function(element) {
+			$(element).css('background', '#ffffff');
+			} 
+			});
+		});

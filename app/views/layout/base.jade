@@ -1,0 +1,18 @@
+doctype html
+html
+    head
+        title #{title}
+        include head.jade
+    body.hold-transition.skin-blue.sidebar-mini.sidebar-collapse
+        div.wrapper
+            include nav.jade
+            include sidebar.jade
+
+            div.content-wrapper
+                block content
+            include footer.jade
+            div.control-sidebar-bg
+            
+        include js.jade
+        block socket
+        block script

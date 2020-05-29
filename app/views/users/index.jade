@@ -1,0 +1,193 @@
+extends ../layout/base
+block content  
+	//- section.content-header
+		
+	// Main content
+	section.content
+		// Your Page Content Here
+		// /.row
+		.row
+			.col-12
+				- if (messages.msg_error)
+					.alert.alert-danger.alert-dismissable
+						button.close(type='button', data-dismiss='alert', aria-hidden='true') ×
+						| #{messages.msg_error}
+				- if (messages.msg_info)
+					.alert.alert-success.alert-dismissable
+						button.close(type='button', data-dismiss='alert', aria-hidden='true') ×
+						| #{messages.msg_info}
+				.card
+					.card-header
+						h3.card-title Daftar User
+						.card-tools
+							button.btn.btn-primary.btn-md#addUser
+								i.glyphicon.glyphicon-plus  
+								| &nbsp; Tambah Pengguna Baru
+					// /.card-header
+					.card-body.table-responsive.no-padding
+
+						table.table.table-striped
+							thead
+								th No.
+								th Username
+								th Email
+								th No
+								th Nama Depan
+								th Nama Belakang
+								th Admin
+								th Action
+							tbody.tableContent
+	#editModal.modal
+		.modal-dialog
+			.modal-content
+				// Modal Header
+				.modal-header
+					h4.modal-title ACCOUNT
+					button.close(type='button', data-dismiss='modal') ×
+				// Modal body
+				.modal-body
+						.form-group.row
+							label.col-sm-4.col-form-label(for='inputUsername' require) Username
+							.col-sm-8
+								input#inputUsername.form-control(type='text' readonly require)
+						.form-group.row
+							label.col-sm-4.col-form-label(for='inputFirstname' require) Nama Pertama
+							.col-sm-8
+								input#inputFirstname.form-control(type='text' require)
+						.form-group.row
+							label.col-sm-4.col-form-label(for='inputLastname') Nama Terakhir
+							.col-sm-8
+								input#inputLastname.form-control(type='text' require)
+						.form-group.row
+							label.col-sm-4.col-form-label(for='inputEmail' ) Email
+							.col-sm-8
+								input#inputEmail.form-control(type='email' require)
+						.form-group.row
+							label.col-sm-4.col-form-label(for='inputNohp') No HP
+							.col-sm-8
+								input#inputNohp.form-control(type='text', autocomplete='off' require)
+						.form-group.row
+							label.col-sm-4.col-form-label(for='inputPassword') Password
+							.col-sm-8
+								input#inputPass.form-control(type='text' , autocomplete='off' require)
+						.form-group.row
+							label.col-sm-4.col-form-label(for='siteOpt') Status
+							.col-sm-8
+								select.form-control#inputStatus
+									option(Value='false') Anonim
+									option(Value='true') Admin
+
+				.modal-footer
+					button.btn.btn-primary(type='button', data-dismiss='modal') Close
+					button#btnSave.btn.btn-primary(type='button', onclick='save(`edit`)' data-dismiss='modal') Save
+
+block script
+	script.
+		var socket = io.connect(BASE_URL);
+		var users= !{users}
+		socket.emit('getUsers')
+		function show(usersData){
+			var i=1;
+			var txt;
+			$(".remove").remove();
+			usersData.forEach((data)=>{
+				txt += "<tr class = 'remove'><td>"+i+"</td>"+
+				"<td>"+data.username+"</td>"+
+				"<td>"+data.email+"</td>"+
+				"<td>"+data.no+"</td>"+
+				"<td>"+data.firstname+"</td>"+
+				"<td>"+data.lastname+"</td>"+
+				"<td>"+data.admin+"</td>"+
+				"<td>"+
+				"<div class='btn-group' role='group' aria-label='Basic example'>"+
+					"<button class='btn btn-info' onclick = editBtn(`"+data.username+"`)>Edit</button>"+
+					"<button class='btn btn-danger' onclick = delBtn(`"+data.username+"`)>Del</button>"+
+				"</div>"+
+				"</td></tr>"
+				i++
+			})
+			$('.tableContent').after(txt)
+		} 
+
+		function delBtn(username){
+			var user = users.filter(function (user) {return user.username == username})
+			if(user.length==0){
+				alert('Data tidak ada / lakukan reload halaman')
+			} else{
+				user = user[0]
+				username = user.username
+				konf = confirm('Apakah anda yakin ingin menghapus user dengan username = '+username)
+				if(konf==true){
+					socket.emit('delUser',username)
+				}
+			}
+		}
+
+		function editBtn(username){
+			var user = users.filter(function (user) {return user.username == username})
+			if(user.length==0){
+				alert('Data tidak ada / lakukan reload halaman')
+			} else{
+				user = user[0]
+				$("#inputUsername").val(user.username);
+				$("#inputFirstname").val(user.firstname);
+				$("#inputLastname").val(user.lastname);
+				$("#inputEmail").val(user.email);
+				$("#inputPass").val(user.password);
+				$("#inputNohp").val(user.no);
+				$('#editModal').modal('show');
+			}
+		}
+
+		function save(action){
+			var status = $("#inputStatus").val()
+			admin = (status)=>{
+				return status == 'true' ? true : false 
+			}
+			status = admin(status)
+
+			data= {
+				'username' : $("#inputUsername").val(),
+				'firstname' : $("#inputFirstname").val(),
+				'lastname' : $("#inputLastname").val(),
+				'email' : $("#inputEmail").val(),
+				'no' : $("#inputNohp").val(),
+				'pass' : $("#inputPass").val(),
+				'admin' : status
+			}
+
+			saveBtn = (action)=>{
+				action=='edit' ? socket.emit('editUser', data) : 
+				socket.emit('addUser', data)
+			}
+			saveBtn(action)
+
+		}
+
+		$('#addUser').click(()=>{
+			$('input').prop('readonly',false);
+			$('input').val('');
+			$('#editModal').modal('show');
+			$('#btnSave').attr('onclick',`save('add')`)
+		})
+
+		socket.on('users',(data)=>{
+			console.log(data)
+			users=data.users
+			show(users)
+			console.log(data.username)
+			if(data.username){
+				username=data.username
+				user = users.filter(function (user) {return user.username == username})
+				$("#inputUsername").val(user.username);
+				$("#inputFirstname").val(user.firstname);
+				$("#inputLastname").val(user.lastname);
+				$("#inputEmail").val(user.email);
+				$("#inputPass").val(user.password);
+				$("#inputNohp").val(user.no);
+			}
+
+		})
+
+		
+			
