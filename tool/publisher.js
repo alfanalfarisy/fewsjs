@@ -25,4 +25,4 @@ function publish(){
 	})
 }
 
-setInterval(publish,10000)
+setInterval(publish,120000)
