@@ -248,7 +248,7 @@ function socket(io){
 			client.publish('dpsWarning',msg)
 		})
 
-		socket.on('meanDps',(msg)=>{
+		socket.on('meanDone',(msg)=>{
 			io.emit('decisionOn', {});
 			console.log('decision ON')
 		})

@@ -34,7 +34,7 @@ function mean(){
 	var start = moment().add(7,'hours').format();
 	var m = moment().minutes();
 
-	if(m==10||m==20||m==33||m==40||m==50||m==0){
+	if(m==10||m==20||m==30|m==40||m==50||m==0){
 		var end = moment().add(7,'hours').subtract(10, 'minutes').format(); 	 	
 		console.log([start,end])
 		console.log('Proses pengambilan nilai rata-rata 10 menit ...')
@@ -125,8 +125,9 @@ function mean(){
 					});
 			})
 		})
-
-		socket.emit('meanDps', {})
+	}
+	if(m==6||m==20||m==30|m==40||m==50||m==0){
+		socket.emit('meanDone', true)
 
 	}
 }

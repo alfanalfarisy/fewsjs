@@ -17,11 +17,15 @@ function publish(){
 		b='0'+b
 		d=moment().date()
 		h=moment().hours()
+		h < 9 ? h='0'+h : h
 		m=moment().minutes()
-		s=moment().second()
+		m < 9 ? m='0'+m : m
 		
-		client.publish('dpsclwg',`${data},${y}${b}${d}${h}${m}${s},${tma},${dbt},${ch}`)
-		console.log(`${data},${y}${b}${d}${h}${m}${s},${tma},${dbt},${ch}`)
+		
+		
+		client.publish('dpsclwg',`${data},${y}${b}${d}${h}${m},${tma},${dbt},${ch}`)
+		console.log(`Publish Data :`)
+		console.log(`${data},${y}${b}${d}${h}${m},${tma},${dbt},${ch}`)
 	})
 }
 

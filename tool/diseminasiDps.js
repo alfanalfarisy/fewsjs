@@ -52,6 +52,7 @@ function sendWhatsappDef(payload,no){
     ).done();
 }
 
+
 function pushNotif(msgPushNotif){
     console.log('Diseminasi Push Notif Running...')
 
@@ -115,7 +116,7 @@ function pushNotif(msgPushNotif){
                 });
             });
             q.allSettled(parallelSubscriptionCalls).then((pushResults) => {
-                console.info(pushResults);
+                // console.info(pushResults);
             });
         }
     });
@@ -127,20 +128,20 @@ function siteBuzzer(data){
     clientMqtt.publish('siteWarningDps', payload)
 }
 
-function msgPushNotif(data){
-    msgPushNotif='Tanggal:'+d+'\n'+
-    'Waktu:'+t+'\n'+
-    'Pos:'+data.pos+'\n'+
-    'Status:'+data.status+'\n'+
-    'Kondisi:'+data.kondisi+'\n'+
-    'TMA:'+data.tma+'cm\n'+
-    'ICH:' +data.ich+'mm\n'
 
-    return msgPushNotif
-}
 
 socket.on('diseminasiOn',(msg)=>{
+    function msgPushNotif(data){
+        msgPushNotif='Tanggal:'+d+'\n'+
+        'Waktu:'+t+'\n'+
+        'Pos:'+data.pos+'\n'+
+        'Status:'+data.status+'\n'+
+        'Kondisi:'+data.kondisi+'\n'+
+        'TMA:'+data.tma+'cm\n'+
+        'ICH:' +data.ich+'mm\n'
 
+        return msgPushNotif
+    }
     console.log('Diseminasi Manual Running...')
 	var data = msg.data.data
     var payload = msgPushNotif(msg.data.data)
@@ -149,7 +150,7 @@ socket.on('diseminasiOn',(msg)=>{
     console.log(data)
 
 
-    pushNotif(data)
+    pushNotif(payload)
     sendWhatsappDef(payload)
     siteBuzzer(data)
 

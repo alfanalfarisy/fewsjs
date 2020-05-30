@@ -29,8 +29,8 @@ var floodRecordSchema = new Schema({
 
 //MongoDB Config
 var connection = mongoose.createConnection('mongodb://localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
-var DpsMain = connection.model('DpsMain', dpsMainSchema,'dpsMainTes');
-var floodRecord = connection.model('floodRecord', floodRecordSchema,'floodRecord');
+var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps_tes');
+var floodRecord = connection.model('floodRecord', floodRecordSchema,'flood-rec');
 
 var socket = require('socket.io-client')('http://localhost:3000');
 const site=[221,222,223]
@@ -41,12 +41,12 @@ function decisionOn(){
 	var end = moment().subtract(60, 'minutes').format(); 	
 
     Promise.all([
-    	DpsMain.findOne({'site':221}).sort({_id:-1}).lean(),
-    	DpsMain.findOne({'site':222}).sort({_id:-1}).lean(),
-    	DpsMain.findOne({'site':223}).sort({_id:-1}).lean(),
-    	DpsMain.find({'site':221}).sort({_id:-1}).limit(6).lean(),
-    	DpsMain.find({'site':222}).sort({_id:-1}).limit(6).lean(),
-    	DpsMain.find({'site':223}).sort({_id:-1}).limit(6).lean()
+    	DpsMain.findOne({'site':221}).sort({'dt':-1}).lean(),
+    	DpsMain.findOne({'site':222}).sort({'dt':-1}).lean(),
+    	DpsMain.findOne({'site':223}).sort({'dt':-1}).lean(),
+    	DpsMain.find({'site':221}).sort({'dt':-1}).limit(6).lean(),
+    	DpsMain.find({'site':222}).sort({'dt':-1}).limit(6).lean(),
+    	DpsMain.find({'site':223}).sort({'dt':-1}).limit(6).lean()
 
     	]).then((result)=>{
     		[ktlm1,dpk1,mgr1,ktlm6,dpk6,mgr6]=result;
