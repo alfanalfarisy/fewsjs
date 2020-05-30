@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var moment = require('moment-timezone')
 
 //Skema DPS Level 2 MongoDB
 var Schema = mongoose.Schema;
@@ -9,15 +10,14 @@ var dpsMainSchema = new Schema({
 	vair: [Number,Number],
 	ch: [Number,Number]
 
-	},
-	{
+	},{
 		timestamps: true
 	});
 
 //MongoDB Config
 var connection = mongoose.createConnection('mongodb://localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
-var DpsMain = connection.model('DpsMain', dpsMainSchema,'dpsMainTes');
-var DpsTemp = connection.model('DpsTemp', dpsMainSchema,'dpsTemp');
+var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps_tes');
+var DpsTemp = connection.model('DpsTemp', dpsMainSchema,'temp_dps');
 
 var socket = require('socket.io-client')('http://localhost:3000');
 
@@ -31,22 +31,20 @@ const st=[221,222,223,331]
 
 //Function Looping Every 10 Minute
 function mean(){
-	var start = new Date(); //Date Now 
-	var m = start.getMinutes(); //get 10 Minute
-	var end = new Date(); //Date Now
+	var start = moment().add(7,'hours').format();
+	var m = moment().minutes();
 
-
-	if(m==10||m==20||m==33||m==40||m==50||m==0){
+	// if(m==10||m==20||m==33||m==40||m==50||m==0){
+		var end = moment().add(7,'hours').subtract(10, 'minutes').format(); 	 	
+		console.log([start,end])
 		console.log('Proses pengambilan nilai rata-rata 10 menit ...')
-		end.setMinutes(end.getMinutes() - 10); // Make a date - 10 minute
-		// console.log(m)
-
+		
 		st.forEach(function(st){
 			//	query data last 10 minute
-			DpsTemp.find({'site':st,'dt':{$lte:start}}).lean().exec(function(err,res){
+			DpsTemp.find({'site':st,'dt':{$lt:start,$gt:end}}).lean().exec(function(err,res){
 				console.log('Pengambilan nilai rata-rata untuk pos pengamatan', st)
 				console.log('Jumlah record data :', res.length)
-
+				console.table(res)
 				//deklarasi Variabel
 				var tma; var sumTma=0; var tmaValid=0; var tmaEmp=0; var tmaEr=0;
 				var vair; var sumVair=0; var vairValid=0; var vairEmp=0; var vairEr=0;
@@ -92,7 +90,7 @@ function mean(){
 							vair=[-1,1001]
 						}
 
-						ch=data.ch[0]
+						ch=[data.ch[0],data.ch[1]]
 
 					})
 
@@ -103,7 +101,7 @@ function mean(){
 				}
 
 				var dataToMongo = new DpsMain({ 
-					dt: start,
+					dt: new Date(moment().add(7,'hours').format()),
 					site: st,
 					tma: tma,
 					vair: vair,
@@ -130,7 +128,7 @@ function mean(){
 
 		socket.emit('meanDps', {})
 
-	}
+	// }
 }
-setInterval(mean,60000) //looping 10 minute
+setInterval(mean,10000) //looping 10 minute
 

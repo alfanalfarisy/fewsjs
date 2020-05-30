@@ -115,9 +115,6 @@ block content
 				.card-body
 					#map
 						#mapid(style="width:100%; height:400px")
-	
-		
-		
 
 	#myModal.modal
 		.modal-dialog
@@ -141,6 +138,7 @@ block script
 	script.
 		var date = $('#dateReq').val();
 		socket.emit('beranda',{date:date,site:siteReq,status:'connect'})
+		
 		function lastrecord(dataRes){
 			$("#postma").html(dataRes[0].tma[0]);
 			$("#posvair").html(dataRes[0].vair[0]);
@@ -162,6 +160,7 @@ block script
 		tabell(dataRes,stMd.th[0],stMd.th[1],stMd.th[2])
 		lastrecord(dataRes)
 		plotMap(stMd.pos,siteReq,stMd.lat,stMd.long,dataRes[0].tma[0],dataRes[0].vair[0],dataRes[0].ch[0],greenIcon)
+
 		socket.on('berandaData',function(msg){
 			dataRes = msg.data.dataRes
 			lastrecord(dataRes)
@@ -180,13 +179,13 @@ block script
 			socket.emit('beranda',{date:date,site:siteReq,status:'connect'})
 
 		})
-		$('#getBtn').click(function(){
-			
-			socket.emit('beranda',{date:date,site:siteReq,status:'req'})
 
+		$('#getBtn').click(function(){
+			socket.emit('beranda',{date:date,site:siteReq,status:'req'})
 		})
 
 		socket.on('sttsValidData',(msg)=>{
+			console.log(msg)
 			$('#tmaDate').text(msg.tma.dt)
 			$('#chDate').text(msg.ch.dt)
 			$('#vairDate').text(msg.vair.dt)

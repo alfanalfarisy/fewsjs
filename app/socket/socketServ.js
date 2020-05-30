@@ -5,7 +5,7 @@ const DpcdMain = require('../models/dpcdMain');
 
 var NewestDps = function socketNewestDps(socket){
     function queryFunction(site){
-        return [{ '$match' : {'site':site}},{ '$sort' : {'_id' : -1}},{ '$limit' : 1}]
+        return [{ '$match' : {'site':site}},{ '$sort' : {'dt' : -1}},{ '$limit' : 1}]
     }
     function queryAllSite(){
         newQuery={}
@@ -14,6 +14,7 @@ var NewestDps = function socketNewestDps(socket){
         })
         return newQuery
     }
+
     Promise.all([
         DpsMain.aggregate([{$facet : queryAllSite()}]),
         DataSite.find({})
@@ -41,10 +42,11 @@ var NewestDps = function socketNewestDps(socket){
 
 var SttsValid=(socket)=>{
     socket.on('sttsValid',(msg)=>{
+        stSite = msg.siteReq
         Promise.all([
-            DpsMain.findOne({'tma.1':1000}).sort({'_id': -1}).lean(),
-            DpsMain.findOne({'vair.1':1000}).sort({'_id': -1}).lean(),
-            DpsMain.findOne({'ch.1':1000}).sort({'_id': -1}).lean(),
+            DpsMain.findOne({'site':stSite,'tma.1':1000}).sort({'dt': -1}).lean(),
+            DpsMain.findOne({'site':stSite,'vair.1':1000}).sort({'dt': -1}).lean(),
+            DpsMain.findOne({'site':stSite,'ch.1':1000}).sort({'dt': -1}).lean(),
         ]).then(result=>{
             [tma,vair,ch]=result
             sttsData={

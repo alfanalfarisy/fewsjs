@@ -52,19 +52,6 @@ const Site = require('../models/dataprofilessite');
 
 			dt.push(doc)
 		}
-		// var date = new Date('2019-12-01 00:00:00')
-		// var dt=[];
-		// for(i=0; i<10; i++){
-		// 	date.setMinutes(date.getMinutes() + 10)
-		// 	var doc= {
-		// 	"dt" : 'ISODate+('+date+')',
-		// 	"site" :'NumberLong('+221+')',
-		// 	"tma" : '[NumberLong('+100+'),NumberLong('+1000+')]', 	
-		// 	"dbt" : '[NumberLong('+20+'),NumberLong('+1000+')]', 	
-		// 	"ch" : '[0,NumberLong('+1000+')]' 	
-		// 	}
-		// 	dt.push(doc)
-		// }
 		res.send(dt)
 	})
 

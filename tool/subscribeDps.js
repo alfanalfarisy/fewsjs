@@ -19,6 +19,10 @@ client.on('error', mqtt_error);
 client.on('message', mqtt_messsageReceived);
 client.on('close', mqtt_close);
 
+const moment = require('moment-timezone');
+// const dateJkt = moment.tz(Date.now(), "Asia/Bangkok");
+
+
 //skema Dokumen DPS MongoDB
 var Schema = mongoose.Schema;
 var dpsTempSchema = new Schema({
@@ -35,7 +39,7 @@ var dpsTempSchema = new Schema({
 
 //MongoDB Config
 var connection = mongoose.createConnection('mongodb://localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
-var DpsTemp = connection.model('DpsTemp', dpsTempSchema,'dpsTemp');
+var DpsTemp = connection.model('DpsTemp', dpsTempSchema,'temp_dps');
 
 function mqtt_connect() {
     console.log("Connecting MQTT");
@@ -79,7 +83,10 @@ function mqtt_messsageReceived(topic, message, packet) {
 	tma=(data)=>{
 		return st==221 ? qc(vTma,0,350) : 
 		st==222 ? qc(vTma,0,550) : 
-		qc(vTma,420,1000) 
+		// st==223 ? qc(vTma,420,1000) :
+		st==223 ? qc(vTma,0,400) :
+		qc(vTma,0,500)
+		// qc(vTma,200,500)
 	}
 
 	// Validasi Value Datetime
@@ -91,7 +98,7 @@ function mqtt_messsageReceived(topic, message, packet) {
 	}
 
 	//Dokumen DPS 
-	var data={
+	var data={	
 		'st': st,
 		'dt': dt,
 		'tma': tma(data),
@@ -103,7 +110,8 @@ function mqtt_messsageReceived(topic, message, packet) {
 
 	//Save Dokument to MongoDB
 	var dataToMongo = new DpsTemp({ 
-	  dt: data.dt,
+	  // dt: data.dt,
+	  dt: new Date(data.dt),
 	  site: data.st,
 	  tma: data.tma,
 	  vair: data.vair,
@@ -111,7 +119,8 @@ function mqtt_messsageReceived(topic, message, packet) {
 	});
 	if(data.st){
 		dataToMongo.save(function (err) {
-		  if (err) return handleError(err);
+		  // if (err) return handleError(err);
+		  console.log(err)
 		  console.log("Data telah disimpan dalam database")
 	
 		});

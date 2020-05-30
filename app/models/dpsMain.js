@@ -20,7 +20,7 @@ var DpsMainSchema = new Schema({
 }
 );
 
-var DpsMain = mongoose.model('DpsMain', DpsMainSchema, 'main_dps');
+var DpsMain = mongoose.model('DpsMain', DpsMainSchema, 'main_dps_tes');
 
 module.exports = DpsMain;
 

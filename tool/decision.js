@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var moment = require('moment-timezone').tz.setDefault("Asia/Jakarta");
+
 
 var dpsMainSchema = new Schema({
 	dt: Date,
@@ -35,9 +37,8 @@ const site=[221,222,223]
 
 function decisionOn(){
 
-	start = new Date()
-	end = new Date()
-	end.setHours(end.getHours() - 1); 
+	var start = moment().format();
+	var end = moment().subtract(60, 'minutes').format(); 	
 
     Promise.all([
     	DpsMain.findOne({'site':221}).sort({_id:-1}).lean(),

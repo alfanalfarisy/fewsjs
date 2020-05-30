@@ -2,12 +2,11 @@ var express = require('express');
 var router = express.Router();
 //models
 const DpsMain = require('../models/dpsMain');
-const DpsMainTes = require('../models/dpsMainTes');
 const Users = require('../models/users');
 const DpcdMain = require('../models/dpcdMain');
 const DataSite = require('../models/dataprofilessite');
 
-const DpsMainStream = DpsMainTes.watch();
+const DpsMainStream = DpsMain.watch();
 //mqtt
 var mqtt = require('mqtt')
 var client  = mqtt.connect('mqtt://broker.mqttdashboard.com')
@@ -15,10 +14,7 @@ var client  = mqtt.connect('mqtt://broker.mqttdashboard.com')
 const SocketServ = require('../socket/socketServ');
 
 
-const moment = require('moment');
-const q = require('q');
-const webPush = require('web-push');
-const keys = require('../config/keys');
+var moment = require('moment-timezone');
 
 
 
@@ -34,11 +30,16 @@ function socket(io){
    	io.on('connection', function(socket){
 
 		console.log('a user connected');
-		var start = new Date('2019-12-07');
-		var end = new Date('2019-12-07');
-		end.setDate(end.getDate() + 1);
-		var stBeranda=221
+		var start = new Date(moment().add(7,'hours').format('YYYY-MM-DD'));
+		var end = new Date(moment().add(7,'hours').add(1, 'day').format('YYYY-MM-DD')); 
 
+		// var start = new Date('2019-12-07');
+		// var end = new Date('2019-12-07');
+		// end.setDate(end.getDate() + 1);
+
+
+		var stBeranda=221
+		var stSite;
 		SocketServ.newestDps(socket)		
 		SocketServ.sttsValid(socket)		
 		SocketServ.allDpcd(socket)		
@@ -161,7 +162,7 @@ function socket(io){
 			if(msg.status=='connect'){}
 			else{
 				Promise.all([
-					DpsMain.find({site:stBeranda,'dt': {$gte: start, $lt:end}}).sort({'_id': -1}),		
+					DpsMain.find({site:stBeranda,'dt': {$gte: start, $lt:end}}).sort({'dt': -1}),		
 					DataSite.find({site:stBeranda}),	
 				])
 				.then(result=>{
@@ -170,14 +171,14 @@ function socket(io){
 						'dataRes' : dataRes,
 						'stMd' :stMd,
 						'site' : Number(stBeranda) 
-					}						
+					}
 					socket.emit('berandaData',{data})						
 				})
 			}			
 		});
 		
 		DpsMainStream.on('change',(change)=>{
-			DpsMain.find({site:stBeranda,'dt': {$gte: start, $lt:end}}).sort({'_id': -1}).exec((err,result)=>{
+			DpsMain.find({site:stBeranda,'dt': {$gte: start, $lt:end}}).sort({'dt': -1}).exec((err,result)=>{
 				// console.log(result)
 				var data={
 					'dataRes' : result,
@@ -265,10 +266,27 @@ function socket(io){
 		socket.on('pushNotif',(msg)=>{
 			io.emit('pushNotif',(msg))
 		})
+
+		socket.on('sttsValid',(data)=>{
+			stSite=data.siteReq
+		})
+		
 		DpsMainStream.on('change', (change) => {
 			SocketServ.newestDps(socket)
-			SocketServ.sttsValid(socket)
 			SocketServ.allDpcd(socket)	
+			Promise.all([
+	            DpsMain.findOne({'site':stSite,'tma.1':1000}).sort({'dt': -1}).lean(),
+	            DpsMain.findOne({'site':stSite,'vair.1':1000}).sort({'dt': -1}).lean(),
+	            DpsMain.findOne({'site':stSite,'ch.1':1000}).sort({'dt': -1}).lean(),
+	        ]).then(result=>{
+	            [tma,vair,ch]=result
+	            sttsData={
+	                'tma' : tma,
+	                'vair' : vair,
+	                'ch' : ch
+	            }
+	            socket.emit('sttsValidData',sttsData)
+	        })
 		});
 	});
 

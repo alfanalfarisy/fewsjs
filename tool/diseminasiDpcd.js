@@ -1,9 +1,9 @@
 const keys = require('../app/config/keys');
-
-// const accountSid = 'AC664a4d430f76c95f1087b5f7a9f34759'; 
-// const authToken = '319f257a2ac633449f4c5258bca7ec4a'; 
 const accountSid = 'ACbd694c940698af960c69d4ed424a9b50'; 
 const authToken = '40d09861d3cb1febf29f3153f59d818a'; 
+
+var moment = require('moment-timezone').tz.setDefault("Asia/Jakarta");
+
 const client = require('twilio')(accountSid, authToken);
 
 var mqtt = require('mqtt')
@@ -27,11 +27,8 @@ var Users = connection.model('Users', usersSchema,'users');
 var socket = require('socket.io-client').connect('http://localhost:3000');
 
 //dt
-var dt = new Date()
-dt.setHours(dt.getHours() + 7)
-c=dt.toString()
-d= c.substring(8,10)+'/'+c.substring(4,7)+'/'+c.substring(11,15)
-t= c.substring(16,24)
+var d = moment().format('YYYY/MM/DD');
+var t = moment().format('hh:mm:ss');    
 
 function sendWhatsappDef(payload,no){
 	client.messages.create({
@@ -47,10 +44,8 @@ function sendWhatsappDef(payload,no){
 
 
 function mean(){
-	var start = new Date(); //Date Now 
-	var m = start.getMinutes(); //get 10 Minute
-	var end = new Date(); //Date Now
-
+	var start = moment().format();
+	var m = moment().minutes();
 
 	if(m==0){
 	Promise.all([

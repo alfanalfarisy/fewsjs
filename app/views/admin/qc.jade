@@ -234,10 +234,7 @@ block script
 			var dpcdMgr=msg['223'][0]
 			var dpcdWwr=msg['331'][0]
 				//dt
-				$('.dtKtlmp').text(dpcdKtlmp.dt)
-				$('.dtDpk').text(dpcdDpk.dt)
-				$('.dtMgr').text(dpcdMgr.dt)
-				$('.dtWwr').text(dpcdWwr.dt)
+
 				//vbr
 				$('.vKtlmp').text(dpcdKtlmp.vbr[0])
 				$('.vDpk').text(dpcdDpk.vbr[0])
@@ -261,6 +258,12 @@ block script
 			var dpsDpk=dataNewestDps.filter(x=>x.site==222)[0]
 			var dpsWwr=dataNewestDps.filter(x=>x.site==223)[0]
 			var dpsMgr=dataNewestDps.filter(x=>x.site==331)[0]
+			
+			//dt
+			$('.dtKtlmp').text(dpsKtlmp.dt)
+			$('.dtDpk').text(dpsDpk.dt)
+			$('.dtMgr').text(dpsMgr.dt)
+			$('.dtWwr').text(dpsWwr.dt)
 			//tma Kond
 			$('.KondTmaKtlmp').text(kondData(dpsKtlmp.tma[1]))
 			$('.KondTmaDpk').text(kondData(dpsDpk.tma[1]))
@@ -295,7 +298,6 @@ block script
 		})
 
 		socket.on('DataDpcd',(dpcd)=>{
-			console.log(dpcd)
 			function chart(site){
 				vpr=[]; vbr=[]; vrb=[]; vrl=[]; x=[];
 				ipr=[]; ibr=[]; irb=[]; irl=[]; x=[];

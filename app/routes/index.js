@@ -11,10 +11,13 @@ const changeStream = DpsMain.watch();
 var session_store;
 var secret="projek20";
 
+var start = new Date(moment().add(7,'hours').format('YYYY-MM-DD'));
+var end = new Date(moment().add(7,'hours').add(1, 'day').format('YYYY-MM-DD')); 
 
-var start = new Date('2019-12-07');
-var end = new Date('2019-12-07');
-end.setDate(end.getDate() + 1);	
+// var start = new Date('2019-12-07');
+// var end = new Date('2019-12-07');
+// end.setDate(end.getDate() + 1);	
+
 
 function socket(io){
 
@@ -37,11 +40,11 @@ function socket(io){
 		title='FEWS | HOME'
 			
 				Promise.all([
-				  DpsMain.find({site:221,'dt':{$gte:start,$lt:end}}).sort({_id : -1}).lean(),
-				  DpsMain.findOne({site:221,'dt':{$gte:start,$lt:end}}).sort({_id : -1}).lean(),
-				  DpsMain.findOne({site:222,'dt':{$gte:start,$lt:end}}).sort({_id : -1}).lean(),
-				  DpsMain.findOne({site:223,'dt':{$gte:start,$lt:end}}).sort({_id : -1}).lean(),
-				  DpsMain.findOne({site:331,'dt':{$gte:start,$lt:end}}).sort({_id : -1}).lean(),
+				  DpsMain.find({site:221,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
+				  DpsMain.findOne({site:221,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
+				  DpsMain.findOne({site:222,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
+				  DpsMain.findOne({site:223,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
+				  DpsMain.findOne({site:331,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
 				  DataSite.find({})
 				])
 				.then(results=>{
@@ -56,6 +59,7 @@ function socket(io){
 						'siteData' : dataSite,
 						'lastData':[ktlmp1,dpk1,mgr1,wwr1]
 					}
+					console.log(data)
 					res.render('index',{results:JSON.stringify(data),session_store:session_store,title:title,siteData:dataSite})
 					
 				})
@@ -86,7 +90,7 @@ function socket(io){
 	});
 	router.get('/warning', function(req, res, next) {
 	  title='FEWS | WARNING'
-	  FloodRecord.findOne({}).sort({'_id':-1}).lean().exec((err,result)=>{
+	  FloodRecord.findOne({}).sort({'dt':-1}).lean().exec((err,result)=>{
 			console.log(result)
 			res.render('warning',{title:title,data:JSON.stringify(result)});
 	  })
@@ -115,7 +119,7 @@ function socket(io){
 		
 
 		Promise.all([
-		  DpsMain.find({site:siteReq,'dt':{$gte:start,$lt:end}}).sort({_id : -1}).lean(),
+		  DpsMain.find({site:siteReq,'dt':{$gte:start,$lt:end}}).sort({'dt' : -1}).lean(),
 		  DataSite.find({site:siteReq}),
 		])
 		.then(results=>{

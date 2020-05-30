@@ -22,7 +22,7 @@ block content
                         strong LAST RECORD
                     .row
                         .col-8
-                            input(type='date' value='2019-12-07').form-control#dateReq
+                            input(type='date').form-control#dateReq
                             select.custom-select.form-control#optSite
                                 for site in siteData
                                     option(value="#{site.site}") #{site.pos}
@@ -97,9 +97,8 @@ block content
                                 th.ch CH
 
 
-    #myModal.modal
-        .modal-dialog
-            .modal-content
+    #myModal.modal.fade(role='dialog')
+        .modal-dialog: .modal-content
                 .modal-header
                     | Threshold
                 .modal-body
@@ -109,6 +108,7 @@ block content
 
 block script
     script.
+        $('#dateReq').val(moment().format('YYYY-MM-DD'))
         var socket = io.connect(BASE_URL);
         var datas= !{results}
         var lastDataSite= !{results}.one
@@ -118,16 +118,19 @@ block script
         var optSite = $('#optSite').val();
         socket.emit('beranda',{status:'connect',date:date,site:optSite})
         $('#siteNameCok').text('KATULAMPA')
-        tabell(datas['221'],200,150,80,'KATULAMPA')
+        tabell(datas['221'],250,150,80,'KATULAMPA')
         socket.on('berandaData',function(msg){
             var stMd=msg.stMd;
             var optSite = $('#optSite').val();
+            console.log('optsite'+ optSite)
             if(msg.data.dataRes.length==0){
                 alert("Data tidak ditemukan!\n" +
                 "Data hanya tersedia pada tanggal:\n" +
                 "1/12/2019 hingga 7/12/2019");
             }else{
                 var dataOptSite= siteData.filter((site)=>{return site.site==optSite})[0]
+                console.log(dataOptSite.th)
+            
                 tabell(msg.data.dataRes,dataOptSite.th[0],dataOptSite.th[1],dataOptSite.th[2],dataOptSite.pos.toUpperCase());
             }
             socket.emit('beranda',{status:'connect',date:date,site:optSite})
