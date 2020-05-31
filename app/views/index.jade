@@ -10,16 +10,16 @@ block content
                     i.fas.fa-question
         .card-body
             .row
-                .col-md-9
+                .col-md-9.order-2.order-md-2
                     .text-center
                         i.far.fa-chart-bar
                             strong CHART REALTIME 
                                 span#siteName
                     .card.card-primary.card-outline
                         #chart(style="width:100%; height:400px")
-                .col-md-3
+                .col-md-3.order-1.order-md-2
                     .text-center
-                        strong LAST RECORD
+                        strong OPTION
                     .row
                         .col-8
                             input(type='date').form-control#dateReq
@@ -42,10 +42,10 @@ block content
                                     td(id='#{site.site}')
 
     .row
-        .col-6
+        .col-md-6
             .card.ml-2.card-primary.card-outline
                 .card-header
-                    strong Table
+                    strong TABEL REALTIME
                 .card-body
                     table.table#tblLastUpdate
                         thead
@@ -67,16 +67,16 @@ block content
                                     i.fas.fa-tint.w3-xlarge
                                     p ch
                         tbody#plotTabel
-        .col-6
+        .col-md-6
             .card.card-primary.card-outline
                 .card-header(style="background-color:white;")
-                    strong LOKASI
+                    strong LOKASI SITE
                 //- .card-body
                 #mapid(style="width:100%; height:310px")
-        .col-12
+        .col-md-12
             .card.card-primary.card-outline
                 .card-header
-                    strong TABLE REALTIME 
+                    strong TABEL REALTIME 
                         span#siteNameCok
                     .card-tools
                         button.btn.btn-tool(type="button" data-toggle='modal' data-target='#myModal')

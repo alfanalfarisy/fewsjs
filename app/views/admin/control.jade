@@ -2,14 +2,14 @@ extends ../layout/base
 
 block content
 	.row(style="margin:0px;")
-		.col-2
+		.col-md-2.order-3
 			.card(style="height:;")
 				.card-header.info-color.white-text.text-center.py-4
 					strong SWITCH
 				.card-body
 						input#validasi.form-control(type='text', placeholder='Text Validation')
 						button.form-control.btn-danger#btnSend.mt-2 ACTION
-		.col-5
+		.col-md-5.order-2
 			.card
 				.card-header.info-color.white-text.text-center.py-4
 					strong Broadcast Info Custom
@@ -25,7 +25,7 @@ block content
 								| max 30 words
 						button.btn.btn-outline-info.btn-rounded.btn-block.my-4.waves-effect.z-depth-0#btnPushCustom(type='') Push Notif
 						button.btn.btn-outline-info.btn-rounded.btn-block.my-4.waves-effect.z-depth-0#btnWaCustom(type='') Whatsapp
-		.col-5
+		.col-md-5.order-1
 			.card
 				.card-header.info-color.white-text.text-center.py-4
 					strong Broadcast Info Default

@@ -1,17 +1,16 @@
 extends layout/base
 block content
 	.row
-		.col-8
-		
+		.col-md-8
 			.card.card-primary.card-outline
 				.card-header(style="background-color:white;")
 					.row
-						.col-6.mt-2
+						.col-md-6.mt-2
 							i.far.fa-chart-bar
 								strong CHART REALTIME 
 									span#siteName
-						.col-6
-							.chose.pull-right
+						.col-md-6
+							.chose.float-right
 								input(type='date').mb-2#dateReq
 								input(type='submit' value='GET').btn.btn-light#getBtn
 								button.btn.btn-tool(data-card-widget="collapse")
@@ -20,10 +19,10 @@ block content
 									i.fas.fa-question
 				.card-body
 					.row
-						.col-12
+						.col-md-12
 							#chart(style="width:100%; height:400px")
 					.row
-						.col-12
+						.col-md-12
 							.row
 								.col-md-4.col-sm-4.col-4
 									.info-box
@@ -76,7 +75,7 @@ block content
 						tr
 							thead.thead-dark
 								th.ch CH
-		.col-4
+		.col-md-4
 			.card.card-outline.card-primary
 				.card-header
 					h5.card-title 

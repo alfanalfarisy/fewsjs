@@ -2,9 +2,9 @@ extends ../layout/base
 block content	
 	section.content
 			.row
-				.col-md-6.col-sm-6.col-lg-3no-gutters
-					.card.border-primary
-						.card-header:.card-title
+				.col-md-6.col-sm-6
+					.card
+						.card-header: .card-title
 								strong Pos Katulampa
 						.card-body
 							.row
@@ -12,7 +12,12 @@ block content
 									.row: .col-12.border Batterai Utama 
 									.row: .col-12.border 
 								.col-8
-									.row: .col-12.border.dtKtlmp 
+									.row 
+										.col-6.border Updated DPS 
+										.col-6.border.dtDpsKtlmp 
+									.row 
+										.col-6.border Updated DPCD 
+										.col-6.border.dtDpcdKtlmp
 									.row
 										.col-6.border Tegangan 
 										.col-6.border.vKtlmp 
@@ -34,8 +39,8 @@ block content
 								.col-4.border Curah Hujan
 								.col-4.border.chKtlmp
 								.col-4.border.KondChKtlmp
-				.col-md-6.col-sm-6.col-lg-3no-gutters
-					.card.border-primary
+				.col-md-6.col-sm-6
+					.card
 						.card-header:.card-title
 								strong Pos Depok
 						.card-body
@@ -44,8 +49,12 @@ block content
 									.row: .col-12.border Batterai Utama 
 									.row: .col-12.border 
 								.col-8
-									.row
-										.col-12.border.dtDpk 
+									.row 
+										.col-6.border Updated DPS 
+										.col-6.border.dtDpsKtlmp 
+									.row 
+										.col-6.border Updated DPCD 
+										.col-6.border.dtDpcdKtlmp
 									.row
 										.col-6.border Tegangan 
 										.col-6.border.vDpk 
@@ -67,8 +76,8 @@ block content
 								.col-4.border Curah Hujan
 								.col-4.border.chDpk
 								.col-4.border.KondChDpk
-				.col-md-6.col-sm-6.col-lg-3no-gutters
-					.card.border-primary
+				.col-md-6.col-sm-6
+					.card
 						.card-header:.card-title
 								strong Pos Manggarai
 						.card-body
@@ -77,7 +86,12 @@ block content
 									.row: .col-12.border Batterai Utama 
 									.row: .col-12.border 
 								.col-8
-									.row: .col-12.border.dtMgr 
+									.row 
+										.col-6.border Updated DPS 
+										.col-6.border.dtDpsKtlmp 
+									.row 
+										.col-6.border Updated DPCD 
+										.col-6.border.dtDpcdKtlmp
 									.row
 										.col-6.border Tegangan 
 										.col-6.border.vMgr 
@@ -99,8 +113,8 @@ block content
 								.col-4.border Curah Hujan
 								.col-4.border.chMgr
 								.col-4.border.KondChMgr
-				.col-md-6.col-sm-6.col-lg-3no-gutters
-					.card.border-primary
+				.col-md-6.col-sm-6
+					.card
 						.card-header:.card-title
 								strong Pos Wawar
 						.card-body
@@ -109,7 +123,12 @@ block content
 									.row: .col-12.border Batterai Utama 
 									.row: .col-12.border 
 								.col-8
-									.row: .col-12.border.dtWwr 
+									.row 
+										.col-6.border Updated DPS 
+										.col-6.border.dtDpsKtlmp 
+									.row 
+										.col-6.border Updated DPCD 
+										.col-6.border.dtDpcdKtlmp
 									.row
 										.col-6.border Tegangan 
 										.col-6.border.vWwr 
@@ -233,8 +252,11 @@ block script
 			var dpcdDpk=msg['222'][0]
 			var dpcdMgr=msg['223'][0]
 			var dpcdWwr=msg['331'][0]
-				//dt
-
+				//dt DPCD
+				$('.dtDpcdKtlmp').text(dpcdKtlmp.dt)
+				$('.dtDpcdDpk').text(dpcdDpk.dt)
+				$('.dtDpcdMgr').text(dpcdMgr.dt)
+				$('.dtDpcdWwr').text(dpcdWwr.dt)
 				//vbr
 				$('.vKtlmp').text(dpcdKtlmp.vbr[0])
 				$('.vDpk').text(dpcdDpk.vbr[0])
@@ -260,10 +282,11 @@ block script
 			var dpsMgr=dataNewestDps.filter(x=>x.site==331)[0]
 			
 			//dt
-			$('.dtKtlmp').text(dpsKtlmp.dt)
-			$('.dtDpk').text(dpsDpk.dt)
-			$('.dtMgr').text(dpsMgr.dt)
-			$('.dtWwr').text(dpsWwr.dt)
+			$('.dtDpsKtlmp').text(dpsKtlmp.dt)
+			$('.dtDpsDpk').text(dpsDpk.dt)
+			$('.dtDpsMgr').text(dpsMgr.dt)
+			$('.dtDpsWwr').text(dpsWwr.dt)
+
 			//tma Kond
 			$('.KondTmaKtlmp').text(kondData(dpsKtlmp.tma[1]))
 			$('.KondTmaDpk').text(kondData(dpsDpk.tma[1]))
