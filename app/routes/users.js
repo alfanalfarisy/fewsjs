@@ -122,7 +122,7 @@ router.post('/add',function (req, res, next){
         v_kontak = req.sanitize( 'kontak' ).escape().trim();
         v_password = req.sanitize( 'password' ).escape().trim();
 
-        User.find({username:req.param('username')}, function (err, user){
+        User.find({$or:[{username:req.param('username')},{email:req.param('email')},{no:req.param('kontak')}]}, function (err, user){
             if (user.length == 0)
             {
                 var admin = new User({
@@ -140,19 +140,19 @@ router.post('/add',function (req, res, next){
                     {
                         console.log(err);
 
-                        req.flash('msg_error', 'Punten, sepertinya ada masalah dengan sistem kami...');
+                        req.flash('msg_error', 'Punten, sepertinya ada masalah dengan sistem kami');
                         res.redirect('/users/login');
                     }
                     else
                     {
-                        req.flash('msg_info', 'User berhasil dibuat...');
+                        req.flash('msg_info', 'Akun Anda berhasil dibuat!');
                         res.redirect('/users/login');
                     }
                 });
             }
             else
             {
-                req.flash('msg_error', 'Punten, username sudah digunakan...');
+                req.flash('msg_error', 'Punten, Username/ Email/ No HP sudah digunakan!');
                 res.render('users/add', { 
                     session_store:session_store,
                     username: req.param('username'),
@@ -167,7 +167,7 @@ router.post('/add',function (req, res, next){
     else
     {   
         // menampilkan pesan error
-        errors_detail = "<p>Punten, sepertinya ada salah pengisian, mangga check lagi formnyah!</p><ul>";
+        errors_detail = "<p>Punten, sepertinya ada salah pengisian, mohon check lagi formnyah!</p><ul>";
 
         for (i in errors)
         {

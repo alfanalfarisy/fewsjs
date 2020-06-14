@@ -19,7 +19,7 @@ var usersSchema = new Schema({});
 var subsSchema = new Schema({});
 
 //MongoDB Config
-var connection = mongoose.createConnection('mongodb://localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
 var Dpcd = connection.model('DpcdMain', dpcdMainSchema,'dpcdMain');
 var Dps = connection.model('DpsMain', dpsMainSchema,'dpsMain');
 var Users = connection.model('Users', usersSchema,'users');

@@ -4,10 +4,10 @@ var Topic = 'dpcdclwg';
 // var Broker_URL = 'mqtt://test.mosquitto.org';
 var Broker_URL = 'mqtt://broker.mqttdashboard.com';
 var options = {
-	clientId: 'projek20',
+	clientId: 'cik',
 	port: 1883,
-	username: 'projek20',
-	password: 'projek20',	
+	username: 'cik',
+	password: 'cik',	
 	keepalive : 60
 };
 
@@ -41,8 +41,8 @@ var dpcdMainSchema = new Schema({
 });
 
 //MongoDB Konfigutasi 
-var connection = mongoose.createConnection('mongodb://localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
-var DpcdMain = connection.model('DpcdMain', dpcdMainSchema,'dpcdMain');
+var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+var DpcdMain = connection.model('DpcdMain', dpcdMainSchema,'main_dpcd');
 
 function mqtt_connect() {
     console.log("Connecting MQTT");
@@ -82,7 +82,7 @@ function mqtt_messsageReceived(topic, message, packet) {
 			[-1,1002]
 	}
 	// Validasi Value Datetime
-	var dt=array[0];
+	var dt=array[1];
 	if(dt){
 		var dt=dt.substring(0,4)+'-'+dt.substring(4,6)+'-'+dt.substring(6,8)+'T'+dt.substring(8,10)+':'+dt.substring(10,12)+':00'
 	} else {
@@ -91,8 +91,8 @@ function mqtt_messsageReceived(topic, message, packet) {
 
 	//payload dokument 1 record
 	var data={
+		'st': array[0],
 		'dt': dt,
-		'st': array[1],
 		'lx': qc(array[2],0,2000),
 		't': qc(array[3],-40,820),
 		'stc': array[4],
@@ -110,8 +110,8 @@ function mqtt_messsageReceived(topic, message, packet) {
 
 	//insert to MongoDB
 	var dataToMongo = new DpcdMain({ 
-	  dt: dt,
 	  site: data.st,
+	  dt: dt,
 	  lx: data.lx,
 	  t: data.t,
 	  stc: data.stc,

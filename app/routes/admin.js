@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var crypto = require('crypto');
 var DpsMain = require('../models/dpsMain');
+var DpsTemp = require('../models/dpsTemp');
 var DataSite = require('../models/dataprofilessite');
 var User = require('../models/users');
 var subscribers = require('../models/subscribers');
@@ -10,6 +11,10 @@ var moment = require('moment');
 const changeStream = DpsMain.watch();
 var session_store;
 var secret="projek20";
+
+var start = new Date(moment().add(7,'hours').format('YYYY-MM-DD'));
+var end = new Date(moment().add(7,'hours').add(1, 'day').format('YYYY-MM-DD')); 
+
 
 function socket(io){
 
@@ -32,15 +37,20 @@ function socket(io){
 		session_store = req.session;
 
 		Promise.all([
-			DpsMain.find({}),
+			DpsMain.find({}).sort({'dt':1}).limit(1),
+			DpsMain.find({}).sort({'dt':-1}).limit(1),
+			DpsMain.find({'dt':{$gt:start,$lt:end}}),
+			DpsTemp.find({'dt':{$gt:start,$lt:end}}),
 			DataSite.find({}),
 		]).then(result=>{
-			[dps,dataSite]=result;
+			[oldDps,newDps,dps,dpsTemp,dataSite]=result;
 			data={
+				'oldDps':oldDps[0],
+				'newDps':newDps[0],
 				'dps':dps,
+				'dpsTemp':dpsTemp,
 				'dataSite':dataSite
 			}
-			console.log(dataSite)
 			res.render('admin/data',{title:title,session_store:session_store, results:JSON.stringify(data), dataSite:dataSite});
 		})
 

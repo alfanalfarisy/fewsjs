@@ -48,6 +48,11 @@ block content
                     .col-md-8
                         .card(style="padding:10px")
                             table.dataTable.table-striped(style="width:100%")
+                .row
+                    .col-md-4
+                    .col-md-8
+                        .card(style="padding:10px")
+                            table.dataTableTemp.table-striped(style="width:100%")
 
 
         .card.card-primary.card-outline
@@ -111,80 +116,12 @@ block script
     script.
         var socket=io.connect(BASE_URL)
         var dataDps= !{results}.dps
+        var dataDpsTemp= !{results}.dpsTemp
         var dataSite= !{results}.dataSite
+        var oldDps= !{results}.oldDps
+        var newDps= !{results}.newDps
 
-    script(src='/js/main.js')
-    script.
-        var sd = $("#startDate").val('2019-12-01');
-        var ed = $("#endDate").val('2020-12-01');
-        var vs = $("#valueStart").val('0');
-        var ve = $("#valueEnd").val('999');
-        var vc = $("#valueChoose").val('tma')
-
-        function save(){
-            dataSave = {
-                site : $('#inputSite').val(),
-                dt : `${$('#inputDate').val()}T${$('#inputTime').val()}`,
-                tma : $('#inputTma').val()
-            }
-
-            socket.emit('saveNewDataDps',dataSave)
-            console.log(dataSave)
-        }
-
-        function kodest(kodeSite){
-            var st;
-            dataSite.forEach((data)=>{
-                if(data.site==kodeSite){
-                    st = data.pos 
-                }
-            })
-            return st
-        }
-
-
-        plotTblDps(dataDps)
-        $('#btnSearch').click(function(){
-            var ds = $("#startDate").val();
-            var de = $("#endDate").val();
-            var vs = $("#valueStart").val();
-            var ve = $("#valueEnd").val();
-            var vc = $("#valueChoose").val();
-            var site = $("#siteChoose").val();
-            socket.emit('reqSearch',{ds:ds,de:de,vs:vs,vc:vc,ve:ve,site:site,id:socket.id})
-            loadReq()
-
-        })            
-        socket.on('dataDpsReq',function(msg){
-            succReq()
-            if(msg.resp.length==0){
-                alert("Data DPS tidak ditemukan!");
-            }
-            if(msg!='connected'){
-                dataDps=msg.resp
-            }
-
-            plotTblDps(dataDps)
-
-        })
-
-
-        $('#btnSearchDpcd').click(function(){
-            var ds = $("#startDateDpcd").val();
-            var de = $("#endDateDpcd").val();
-            socket.emit('reqSearchDpcd',{ds:ds,de:de,id:socket.id})
-
-        })
-        socket.on('DataDpcd',(data)=>{
-            array=[data['221'],data['222'],data['223']]
-            var data = [].concat.apply([], array)
-            plotTblDpcd(data)
-        })
-
-        socket.on('dataDpcdReq',(data)=>{
-            if(data.resp.length==0){
-                alert("Data DPCD tidak ditemukan!");
-            }
-            plotTblDpcd(data.resp)
-
-        })
+    script(src='/js/tableData.js')
+    script(src='/js/views/dataAdmin.js')
+    //- script.
+      

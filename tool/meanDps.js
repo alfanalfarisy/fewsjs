@@ -15,8 +15,8 @@ var dpsMainSchema = new Schema({
 	});
 
 //MongoDB Config
-var connection = mongoose.createConnection('mongodb://localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
-var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps_tes');
+var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps');
 var DpsTemp = connection.model('DpsTemp', dpsMainSchema,'temp_dps');
 
 var socket = require('socket.io-client')('http://localhost:3000');
@@ -29,14 +29,14 @@ var clientMqtt  = mqtt.connect('mqtt://broker.mqttdashboard.com')
 const st=[221,222,223,331]
 
 
-//Function Looping Every 10 Minute
+// Function Looping Every 10 Minute
 function mean(){
 	var start = moment().add(7,'hours').format();
 	var m = moment().minutes();
 
 	if(m==10||m==20||m==30|m==40||m==50||m==0){
 		var end = moment().add(7,'hours').subtract(10, 'minutes').format(); 	 	
-		console.log([start,end])
+		console.log('Range data data : ', [start,end])
 		console.log('Proses pengambilan nilai rata-rata 10 menit ...')
 		
 		st.forEach(function(st){
@@ -111,7 +111,7 @@ function mean(){
 				console.log('Penjumlahan TMA Valid :', sumTma)
 				console.log('total record TMA Valid :', tmaValid)
 				console.log('rata-rata TMA :', tma)
-				console.log('Penjumlahan V air Valid :', sumVair)
+				console.log('Penjumlahan V air Valid :', Math.round(sumVair*100)/100)
 				console.log('total record V air Valid :', vairValid)
 				console.log('rata-rata V air :', vair)
 				console.log('CH (tidak mengikuti proses penghitungan rata-rata):', ch)
@@ -124,10 +124,11 @@ function mean(){
 						console.log("Data disimpan")
 					});
 			})
+
 		})
-	}
-	if(m==6||m==20||m==30|m==40||m==50||m==0){
-		socket.emit('meanDone', true)
+
+	
+		setTimeout(()=>{socket.emit('meanDone', true)},700)
 
 	}
 }

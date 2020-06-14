@@ -14,11 +14,6 @@ var secret="projek20";
 var start = new Date(moment().add(7,'hours').format('YYYY-MM-DD'));
 var end = new Date(moment().add(7,'hours').add(1, 'day').format('YYYY-MM-DD')); 
 
-// var start = new Date('2019-12-07');
-// var end = new Date('2019-12-07');
-// end.setDate(end.getDate() + 1);	
-
-
 function socket(io){
 
 	router.get('/*', function(req, res, next) {
@@ -38,8 +33,11 @@ function socket(io){
 	router.get('/', function(req, res, next) {		
 		session_store = req.session;
 		title='FEWS | HOME'
-			
+		console.log(start)
+		console.log(end)
 				Promise.all([
+					DpsMain.find({}).sort({'dt':1}).limit(1),
+					DpsMain.find({}).sort({'dt':-1}).limit(1),
 				  DpsMain.find({site:221,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
 				  DpsMain.findOne({site:221,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
 				  DpsMain.findOne({site:222,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
@@ -49,8 +47,10 @@ function socket(io){
 				])
 				.then(results=>{
 
-					var [ktlmp,ktlmp1,dpk1,mgr1,wwr1,dataSite] = results;
+					var [oldDps,newDps,ktlmp,ktlmp1,dpk1,mgr1,wwr1,dataSite] = results;
 					var data = {
+						'oldDps':oldDps[0],
+						'newDps':newDps[0],
 						'221' : ktlmp,
 						'221one' : ktlmp1,
 						'222one' : dpk1,
@@ -59,7 +59,7 @@ function socket(io){
 						'siteData' : dataSite,
 						'lastData':[ktlmp1,dpk1,mgr1,wwr1]
 					}
-					console.log(data)
+					// console.log(data)
 					res.render('index',{results:JSON.stringify(data),session_store:session_store,title:title,siteData:dataSite})
 					
 				})
@@ -98,11 +98,15 @@ function socket(io){
 	router.get('/data-dps',Auth_mdw.check_login, function(req, res, next) {
 	  title='FEWS | Data-Dps'
 		Promise.all([
+			DpsMain.find({}).sort({'dt':1}).limit(1),
+			DpsMain.find({}).sort({'dt':-1}).limit(1),
 			DpsMain.find({}),
 			DataSite.find({}).lean(),
 		]).then(result=>{
-			[dps,dataSite]=result;
+			[oldDps,newDps,dps,dataSite]=result;
 			data={
+				'oldDps':oldDps[0],
+				'newDps':newDps[0],
 				'dps':dps,
 				'dataSite':dataSite
 			}
@@ -119,12 +123,16 @@ function socket(io){
 		
 
 		Promise.all([
-		  DpsMain.find({site:siteReq,'dt':{$gte:start,$lt:end}}).sort({'dt' : -1}).lean(),
-		  DataSite.find({site:siteReq}),
+			DpsMain.find({}).sort({'dt':1}).limit(1),
+			DpsMain.find({}).sort({'dt':-1}).limit(1),
+			DpsMain.find({site:siteReq,'dt':{$gte:start,$lt:end}}).sort({'dt' : -1}).lean(),
+			DataSite.find({site:siteReq}),
 		])
 		.then(results=>{
-			var [dasAll,stMd] = results;
+			var [oldDps,newDps,dasAll,stMd] = results;
 			var data = {
+				'oldDps':oldDps[0],
+				'newDps':newDps[0],
 				'dataRes' : dasAll,
 				'stMd' : stMd
 			}

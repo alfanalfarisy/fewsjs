@@ -5,11 +5,11 @@ block content
 			.card.card-primary.card-outline
 				.card-header(style="background-color:white;")
 					.row
-						.col-md-6.mt-2
+						.col-md-6.mt-2.col-12
 							i.far.fa-chart-bar
 								strong CHART REALTIME 
 									span#siteName
-						.col-md-6
+						.col-md-6.col-12
 							.chose.float-right
 								input(type='date').mb-2#dateReq
 								input(type='submit' value='GET').btn.btn-light#getBtn
@@ -115,7 +115,7 @@ block content
 					#map
 						#mapid(style="width:100%; height:400px")
 
-	#myModal.modal
+	#myModal.modal.fade(role='dialog')
 		.modal-dialog
 			.modal-content
 				.modal-header
@@ -128,65 +128,17 @@ block content
 
 block script
 	script.
+		$('#dateReq').val(moment().add(7,'hours').format('YYYY-MM-DD'))
 		var siteReq= !{siteReq};
 		var result= !{results};
 		var dataRes=result.dataRes
 		var stMd=result.stMd[0]
 		var socket = io.connect(BASE_URL);
-		
-	script.
-		var date = $('#dateReq').val();
-		socket.emit('beranda',{date:date,site:siteReq,status:'connect'})
-		
-		function lastrecord(dataRes){
-			$("#postma").html(dataRes[0].tma[0]);
-			$("#posvair").html(dataRes[0].vair[0]);
-			$("#posch").html(dataRes[0].ch[0]);
-		}
+		var oldDps= !{results}.oldDps
+		var newDps= !{results}.newDps
+	script(src='/js/mapPlot.js')
+	script(src='/js/main.js')
+	script(src='/js/chartNTabel.js')
+	script(src='/js/views/site.js')
 
-		socket.emit('sttsValid',{status:'connect',siteReq:siteReq})
-	
-		var sttsTma = statusTma(dataRes[0].tma[0],stMd.th[0],stMd.th[1],stMd.th[2])
-		var ichVal = ich(dataRes)
-		var sttsIch = statusIch(ichVal)
-
-		$('#sttsIch').text(sttsIch)
-		$('#sttsTma').text(sttsTma)
-		$('#nilaiIch').text(ichVal+'mm (1 jam terkahir)')
-		$('#siteName').text(stMd.pos.toUpperCase())
-
-
-		tabell(dataRes,stMd.th[0],stMd.th[1],stMd.th[2])
-		lastrecord(dataRes)
-		plotMap(stMd.pos,siteReq,stMd.lat,stMd.long,dataRes[0].tma[0],dataRes[0].vair[0],dataRes[0].ch[0],greenIcon)
-
-		socket.on('berandaData',function(msg){
-			dataRes = msg.data.dataRes
-			lastrecord(dataRes)
-			tabell(dataRes,stMd.th[0],stMd.th[1],stMd.th[2])
-
-			plotMap(stMd.pos,siteReq,stMd.lat,stMd.long,dataRes[0].tma[0],dataRes[0].vair[0],dataRes[0].ch[0],greenIcon)
-			
-			var sttsTma = statusTma(dataRes[0].tma[0],stMd.th[0],stMd.th[1],stMd.th[2])
-			var ichVal = ich(dataRes)
-			var sttsIch = statusIch(ichVal)
-			$('#sttsIch').text(sttsIch)
-			$('#sttsTma').text(sttsTma)
-			$('#nilaiIch').text(ichVal+'mm (1 jam terkahir)')
-			$('#siteName').text(stMd.pos.toUpperCase())			
-
-			socket.emit('beranda',{date:date,site:siteReq,status:'connect'})
-
-		})
-
-		$('#getBtn').click(function(){
-			socket.emit('beranda',{date:date,site:siteReq,status:'req'})
-		})
-
-		socket.on('sttsValidData',(msg)=>{
-			console.log(msg)
-			$('#tmaDate').text(msg.tma.dt)
-			$('#chDate').text(msg.ch.dt)
-			$('#vairDate').text(msg.vair.dt)
-		})
 

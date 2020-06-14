@@ -47,6 +47,7 @@ function tabell(dataRes,siaga1,siaga2,siaga3,namePos){
             return tmaTemp>siaga1  ? '#e84941' 
             : tmaTemp>siaga2&&tmaTemp<=siaga1 ? '#e8b158' 
             : tmaTemp>siaga3&&tmaTemp<=siaga2 ?'yellow'
+            : tmaTemp<0?'grey'
             : '#abeb34'
         }
         bg = kodeToSt(siaga1,siaga2,siaga3)

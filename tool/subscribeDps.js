@@ -4,14 +4,14 @@ var Topic = 'dpsclwg';
 // var Broker_URL = 'mqtt://test.mosquitto.org';
 var Broker_URL = 'mqtt://broker.mqttdashboard.com';
 var options = {
-	clientId: 'projek20',
+	// clientId: 'projek20',
 	port: 1883,
-	username: 'projek20',
-	password: 'projek20',	
+	// username: 'projek20',
+	// password: 'projek20',
 	keepalive : 60
 };
 
-//mqtt konfig
+//mqtt Config
 var client  = mqtt.connect(Broker_URL, options);
 client.on('connect', mqtt_connect);
 client.on('reconnect', mqtt_reconnect);
@@ -19,15 +19,12 @@ client.on('error', mqtt_error);
 client.on('message', mqtt_messsageReceived);
 client.on('close', mqtt_close);
 
-const moment = require('moment-timezone');
-// const dateJkt = moment.tz(Date.now(), "Asia/Bangkok");
-
 
 //skema Dokumen DPS MongoDB
 var Schema = mongoose.Schema;
 var dpsTempSchema = new Schema({
 	dt: Date,
-	site: [Number],
+	site: Number,
 	tma: [Number,Number],
 	vair: [Number,Number],
 	ch: [Number,Number]
@@ -38,7 +35,7 @@ var dpsTempSchema = new Schema({
 	});
 
 //MongoDB Config
-var connection = mongoose.createConnection('mongodb://localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
 var DpsTemp = connection.model('DpsTemp', dpsTempSchema,'temp_dps');
 
 function mqtt_connect() {
@@ -120,7 +117,7 @@ function mqtt_messsageReceived(topic, message, packet) {
 	if(data.st){
 		dataToMongo.save(function (err) {
 		  // if (err) return handleError(err);
-		  console.log(err)
+		  // console.log(err)
 		  console.log("Data telah disimpan dalam database")
 	
 		});

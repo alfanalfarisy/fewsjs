@@ -1,3 +1,4 @@
+
 function plotTblDpcd(datasDpcd){
     var dataSet = [];
     datasDpcd.forEach(function(data){     
@@ -47,6 +48,36 @@ function plotTblDpcd(datasDpcd){
     } );
 
 }
+function plotTblDpsTemp(dataDpsTemp){
+    var dataSet = [];
+    dataDpsTemp.forEach(function(data){     
+
+        st = kodest(data.site)
+
+        dataSet.push([st,data.dt,data.tma[0],data.ch[0],data.vair[0]]);
+        })
+
+    $('.dataTableTemp').DataTable( {
+        data: dataSet,
+        destroy: true,
+        responsive: true,
+        scrollX: true,
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        scrollY: true,
+        columns: [
+            { title: "Site" },
+            { title: "Tanggal" },
+            { title: "tma" },
+            { title: "laju" },
+            { title: "ch" }
+        ],
+    } );
+
+}
+
 function plotTblDps(datasDps){
     var dataSet = [];
     datasDps.forEach(function(data){     

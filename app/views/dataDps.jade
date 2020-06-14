@@ -50,50 +50,11 @@ block content
            
 
 block script
-    //- script(src='/js/tableData.js')
     script.
         var socket=io.connect(BASE_URL)
         var dataDps= !{results}.dps
-        var dataSite= !{results}.dataSite
-        console.log(dataDps)
-        
-        var sd = $("#startDate").val('2019-12-01');
-        var ed = $("#endDate").val('2020-12-01');
-        var vs = $("#valueStart").val('0');
-        var ve = $("#valueEnd").val('999');
-        var vc = $("#valueChoose").val('tma')
-
-
-        function kodest(kodeSite){
-            var st;
-            dataSite.forEach((data)=>{
-                if(data.site==kodeSite){
-                    st = data.pos 
-                }
-            })
-            return st
-        }
-
-        plotTblDps(dataDps)
-        $('#btnSearch').click(function(){
-            var ds = $("#startDate").val();
-            var de = $("#endDate").val();
-            var vs = $("#valueStart").val();
-            var ve = $("#valueEnd").val();
-            var vc = $("#valueChoose").val();
-            var site = $("#siteChoose").val();
-            console.log('tes')
-            socket.emit('reqSearch',{ds:ds,de:de,vs:vs,vc:vc,ve:ve,site:site,id:socket.id})
-            
-        })            
-        socket.on('dataDpsReq',function(msg){
-            if(msg.resp.length==0){
-                alert("Data DPS tidak ditemukan!");
-            }
-            if(msg!='connected'){
-                dataDps=msg.resp
-            }
-
-            plotTblDps(dataDps)
-
-        })
+        var oldDps= !{results}.oldDps
+        var newDps= !{results}.newDps
+        var dataSite= !{results}.dataSite   
+    script(src='/js/tableData.js')
+    script(src='/js/views/dataNonAdmin.js')

@@ -1,8 +1,8 @@
 const keys = require('../app/config/keys');
-const accountSid = 'ACbd694c940698af960c69d4ed424a9b50'; 
-const authToken = '3a959f57035d4ddd37ac5770f4cd76d1'; 
+const accountSid = 'ACfd59eb2e39864f41da9fa597bd98f871'; 
+const authToken = 'fb3d4197345d08595fbd54f070a59585'; 
 const client = require('twilio')(accountSid, authToken);
-var moment = require('moment-timezone').tz.setDefault("Asia/Jakarta");
+var moment = require('moment-timezone')
 var mqtt = require('mqtt')
 var clientMqtt  = mqtt.connect('mqtt://broker.mqttdashboard.com')
 const q = require('q');
@@ -26,7 +26,8 @@ var usersSchema = new Schema({});
 var subsSchema = new Schema({});
 
 //MongoDB Config
-var connection = mongoose.createConnection('mongodb://localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+var connection = mongoose.createConnection('mongodb://projek20:projek20@198.211.106.64:27017/siagabanjir',{useNewUrlParser: true,useUnifiedTopology: true});
+// var connection = mongoose.createConnection('mongodb://projek20:projek20@198.211.106.64:27017/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
 var DpsMain = connection.model('DpsMain', dpsMainSchema,'dpsMain');
 var Users = connection.model('Users', usersSchema,'users');
 var Subscription = connection.model('Subscription', subsSchema,'subscribers');
@@ -34,19 +35,28 @@ var socket = require('socket.io-client').connect('http://localhost:3000');
 const site=[221,222,223]
 
 //dt
-var d = moment().format('YYYY/MM/DD');
-var t = moment().format('hh:mm:ss');    
 
-function sendWhatsappDef(payload,no){
+function pos(site){
+    return site==221 ? 'Katulampa' :
+    site==222 ? 'Depok' :
+    site==223 ? 'Manggarai' :
+    'Wawar'
+}
+
+
+function sendWhatsappDef(payload,d,t,no){
     console.log('Diseminasi Whatsapp Running..')
     client.messages.create({
         from: 'whatsapp:+14155238886',
-        body: `Your Attention Required!-----Tanggal:${d}----Waktu:${t}----Pos:${payload.pos}---Status:${payload.status}---Kondisi:${payload.kondisi}---TMA:${payload.tma}cm----ICH:${payload.ich}mm code is 112 for emergency`,
+        // body: `Your Attention Required!-----Tanggal:${d}----Waktu:${t}----Pos:${payload.site}---Status:${payload.status}---Kondisi:${payload.kondisi}---TMA:${payload.tma}cm----ICH:${payload.ich}mm code is 112 for emergency`,
+        // msg =  `Your Attention Required!-----Tanggal:${d}----Waktu:${t}----Pos:${pos(payload.site)}---Status:${payload.status}---Kondisi:${payload.kondisi}---TMA:${payload.tma} cm----ICH:${payload.ich} mm----code is 112 for emergency`,
+        body:  `Your Attention Required!-----Tanggal:${d}----Waktu:${t}----Pos:${pos(payload.site)}---Status:${payload.status}---Kondisi:${payload.kondisi}---TMA:${payload.tma} cm----ICH:${payload.ich} mm---- code is 112 for emergency`,
         to: 'whatsapp:+6285233333656'
         // to: 'whatsapp:+62'+no
     })
     .then((message) => 
-        {   console.log('Pesan Whatsapp:'),
+        {
+            console.log('Pesan Whatsapp:')
             console.log(message.body)
         }
     ).done();
@@ -124,25 +134,28 @@ function pushNotif(msgPushNotif){
 
 
 function siteBuzzer(data){
-    payload=data.st+','+data.tma+','+data.status+','+data.kondisi
+    payload=pos(data.site)+','+data.tma+','+data.status+','+data.kondisi
     clientMqtt.publish('siteWarningDps', payload)
+    console.log('')
+    console.log('Publish data Pos Buzzer: ',payload)
 }
 
 
 
+
 socket.on('diseminasiOn',(msg)=>{
+var d = moment().add(7,'hours').format('YYYY/MM/DD');
+var t = moment().add(7,'hours').format('HH:mm:ss');    
     function msgPushNotif(data){
         msgPushNotif='Tanggal:'+d+'\n'+
         'Waktu:'+t+'\n'+
-        'Pos:'+data.pos+'\n'+
-        'Status:'+data.status+'\n'+
-        'Kondisi:'+data.kondisi+'\n'+
-        'TMA:'+data.tma+'cm\n'+
-        'ICH:' +data.ich+'mm\n'
+        'Pos:'+pos(data.site)+'\n'+
+        `Kondisi: ${data.kondisi} (${data.ich} mm)\n` +
+        `Status: ${data.status} (${data.tma} mm)\n`
 
         return msgPushNotif
     }
-    console.log('Diseminasi Manual Running...')
+    console.log('Diseminasi Running...')
 	var data = msg.data.data
     var payload = msgPushNotif(msg.data.data)
     
@@ -151,7 +164,7 @@ socket.on('diseminasiOn',(msg)=>{
 
 
     pushNotif(payload)
-    sendWhatsappDef(payload)
+    sendWhatsappDef(data,d,t)
     siteBuzzer(data)
 
     Users.find({}).lean().exec((err,resp)=>{
@@ -164,6 +177,8 @@ socket.on('diseminasiOn',(msg)=>{
 
 //Wa Manual
 socket.on('waDiseminasi',(msg)=>{
+    var d = moment().add(7,'hours').format('YYYY/MM/DD');
+    var t = moment().add(7,'hours').format('HH:mm:ss');  
     var payload=msg.msgPayload
     console.log('payload')
 
@@ -172,13 +187,13 @@ socket.on('waDiseminasi',(msg)=>{
             from: 'whatsapp:+14155238886',
             body: `Your Attention Required!......
             ${payload}
-            .......code is 112 for emergency`,
+            ....... code is 112 for emergency`,
             to: 'whatsapp:+6285233333656'
         })
         .then(message => console.log('Pesan Whatsapp\n',message.sid)).done();
     }
     if(msg.type=='default'){
-        sendWhatsappDef(payload)
+        sendWhatsappDef(payload,d,t)
     }else{
         sendWhatsappCustom()
     }
@@ -193,6 +208,19 @@ socket.on('waDiseminasi',(msg)=>{
 
 //Push Notif Manual
 socket.on('pushNotif',(msg)=>{
+    var d = moment().add(7,'hours').format('YYYY/MM/DD');
+    var t = moment().add(7,'hours').format('HH:mm:ss');  
+    function msgPushNotif(data){
+        msgPushNotif='Tanggal:'+d+'\n'+
+        'Waktu:'+t+'\n'+
+        'Pos:'+pos(data.site)+'\n'+
+        'Status:'+data.status+'\n'+
+        'Kondisi:'+data.kondisi+'\n'+
+        'TMA:'+data.tma+'cm\n'+
+        'ICH:' +data.ich+'mm\n'
+
+        return msgPushNotif
+    }
     console.log('Push Notif manual Running')
     if(msg.type=='custom'){
         pushNotif(msg.msgPayload)

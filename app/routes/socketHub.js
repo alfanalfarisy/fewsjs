@@ -7,6 +7,7 @@ const DpcdMain = require('../models/dpcdMain');
 const DataSite = require('../models/dataprofilessite');
 
 const DpsMainStream = DpsMain.watch();
+const DpcdMainStream = DpcdMain.watch();
 //mqtt
 var mqtt = require('mqtt')
 var client  = mqtt.connect('mqtt://broker.mqttdashboard.com')
@@ -223,8 +224,8 @@ function socket(io){
 		})
 
 		socket.on('saveNewDataDps',(data)=>{
-			DpsMainTes.findOne({},(err,resp)=>{
-				var dpsNew = new DpsMainTes({
+			DpsMain.findOne({},(err,resp)=>{
+				var dpsNew = new DpsMain({
 					site : data.site,
 					tma: [data.tma,1004],
 					dt: data.dt,
@@ -233,7 +234,6 @@ function socket(io){
 	
 				});
 				dpsNew.save(function(err) {
-					console.log(err)
 				});
 			})
 		})
@@ -273,7 +273,6 @@ function socket(io){
 		
 		DpsMainStream.on('change', (change) => {
 			SocketServ.newestDps(socket)
-			SocketServ.allDpcd(socket)	
 			Promise.all([
 	            DpsMain.findOne({'site':stSite,'tma.1':1000}).sort({'dt': -1}).lean(),
 	            DpsMain.findOne({'site':stSite,'vair.1':1000}).sort({'dt': -1}).lean(),
@@ -287,6 +286,11 @@ function socket(io){
 	            }
 	            socket.emit('sttsValidData',sttsData)
 	        })
+		});
+		DpcdMainStream.on('change', (change) => {
+			console.log('OK')
+			SocketServ.allDpcd(socket)	
+		
 		});
 	});
 

@@ -5,9 +5,9 @@ block content
             .card#mapid(style="width:100%; height:100vh")
 
 block script    
-    //- script(src='/js/mapPlot.js')
     script.
         var socket = io.connect(BASE_URL);
         socket.on('newestDps',function(msg){
             plot(msg.siteData,msg.newestDps)
         })
+    script(src='/js/mapPlot.js')

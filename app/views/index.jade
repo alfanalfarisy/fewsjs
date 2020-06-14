@@ -45,6 +45,9 @@ block content
         .col-md-6
             .card.ml-2.card-primary.card-outline
                 .card-header
+                     .card-tools
+                        button.btn.btn-tool(data-card-widget="collapse")
+                            i.fas.fa-minus
                     strong TABEL REALTIME
                 .card-body
                     table.table#tblLastUpdate
@@ -71,14 +74,19 @@ block content
             .card.card-primary.card-outline
                 .card-header(style="background-color:white;")
                     strong LOKASI SITE
-                //- .card-body
-                #mapid(style="width:100%; height:310px")
+                    .card-tools
+                        button.btn.btn-tool(data-card-widget="collapse")
+                            i.fas.fa-minus
+                .card-body
+                    #mapid(style="width:100%; height:310px")
         .col-md-12
             .card.card-primary.card-outline
                 .card-header
                     strong TABEL REALTIME 
                         span#siteNameCok
                     .card-tools
+                        button.btn.btn-tool(data-card-widget="collapse")
+                            i.fas.fa-minus
                         button.btn.btn-tool(type="button" data-toggle='modal' data-target='#myModal')
                             i.fas.fa-question
                 table(cellpadding="100").table.table-responsive.table-bordered
@@ -108,61 +116,18 @@ block content
 
 block script
     script.
-        $('#dateReq').val(moment().format('YYYY-MM-DD'))
+        $('#dateReq').val(moment().add(7,'hours').format('YYYY-MM-DD'))
         var socket = io.connect(BASE_URL);
         var datas= !{results}
         var lastDataSite= !{results}.one
         var siteData= datas.siteData
-    script.
-        var date = $('#dateReq').val();
-        var optSite = $('#optSite').val();
-        socket.emit('beranda',{status:'connect',date:date,site:optSite})
-        $('#siteNameCok').text('KATULAMPA')
-        tabell(datas['221'],250,150,80,'KATULAMPA')
-        socket.on('berandaData',function(msg){
-            var stMd=msg.stMd;
-            var optSite = $('#optSite').val();
-            console.log('optsite'+ optSite)
-            if(msg.data.dataRes.length==0){
-                alert("Data tidak ditemukan!\n" +
-                "Data hanya tersedia pada tanggal:\n" +
-                "1/12/2019 hingga 7/12/2019");
-            }else{
-                var dataOptSite= siteData.filter((site)=>{return site.site==optSite})[0]
-                console.log(dataOptSite.th)
-            
-                tabell(msg.data.dataRes,dataOptSite.th[0],dataOptSite.th[1],dataOptSite.th[2],dataOptSite.pos.toUpperCase());
-            }
-            socket.emit('beranda',{status:'connect',date:date,site:optSite})
-            
-        })
-        $('#getBtn').click(function(){
-            var date = $('#dateReq').val();
-            var optSite = $('#optSite').val();
-            socket.emit('beranda',{date:date,site:optSite,status:'req'})
-        })
-        
-
-        //Panel Last Data Table
-        socket.on('newestDps',(data)=>{
-
-            var dataNewestDps=data.newestDps
-            var siteData=data.siteData
-            
-
-            plot(siteData,dataNewestDps)
-            siteData.forEach((data)=>{
-                var x = dataNewestDps.filter((x)=>{return x.site==data.site})[0]
-                $(`#${data.site}`).html(': '+statusTma(x.tma[0],data.th[0],data.th[1],data.th[2]))
-            })
-
-            $('#dtUpdate').text(': '+dataNewestDps[0].dt.substring(0,16))
-            
-
-            $('#plotTabel').html(plotTabelLast(dataNewestDps,siteData))
-        })
-
-
+        var oldDps= !{results}.oldDps
+        var newDps= !{results}.newDps
+    script(src='/js/mapPlot.js')
+    script(src='/js/main.js')
+    script(src='/js/chartNTabel.js')
+    script(src='/js/views/index.js')
+ 
 
 
 

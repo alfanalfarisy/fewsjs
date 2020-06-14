@@ -16,10 +16,11 @@ function publish(){
 		b=moment().month()+1
 		b='0'+b
 		d=moment().date()
+		d < 10 ? d='0'+d : d
 		h=moment().hours()
-		h < 9 ? h='0'+h : h
+		h < 10 ? h='0'+h : h
 		m=moment().minutes()
-		m < 9 ? m='0'+m : m
+		m < 10 ? m='0'+m : m
 		
 		
 		
