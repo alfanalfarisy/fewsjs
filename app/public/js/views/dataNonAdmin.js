@@ -5,7 +5,7 @@ var ve = $("#valueEnd").val('999');
 var vc = $("#valueChoose").val('tma')
 
 $('#startDate').attr({'min':moment(oldDps.dt).format("YYYY-MM-DD"),'max':moment(newDps.dt).format("YYYY-MM-DD")})
-$('#endDate').attr({'min':moment(oldDps.dt).format("YYYY-MM-DD"),'max':moment(newDps.dt).format("YYYY-MM-DD")})
+$('#endDate').attr({'min':moment(oldDps.dt).format("YYYY-MM-DD"),'max':moment(newDps.dt).add(1,'days').format("YYYY-MM-DD")})
 
 function kodest(kodeSite){
     var st;

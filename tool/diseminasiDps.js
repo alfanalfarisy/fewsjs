@@ -40,7 +40,7 @@ function pos(site){
     return site==221 ? 'Katulampa' :
     site==222 ? 'Depok' :
     site==223 ? 'Manggarai' :
-    'Wawar'
+    'Kedunggupit'
 }
 
 

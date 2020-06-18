@@ -33,7 +33,7 @@ var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps');
 var floodRecord = connection.model('floodRecord', floodRecordSchema,'flood_rec');
 
 var socket = require('socket.io-client')('http://localhost:3000');
-const site=[221]
+const site=[331]
 
 function decisionOn(){
 
@@ -44,23 +44,28 @@ function decisionOn(){
     	DpsMain.findOne({'site':221}).sort({'dt':-1}).lean(),
     	// DpsMain.findOne({'site':222}).sort({'dt':-1}).lean(),
     	// DpsMain.findOne({'site':223}).sort({'dt':-1}).lean(),
+    	// DpsMain.findOne({'site':331}).sort({'dt':-1}).lean(),
     	DpsMain.find({'site':221}).sort({'dt':-1}).limit(6).lean(),
     	// DpsMain.find({'site':222}).sort({'dt':-1}).limit(6).lean(),
     	// DpsMain.find({'site':223}).sort({'dt':-1}).limit(6).lean()
+    	// DpsMain.find({'site':331}).sort({'dt':-1}).limit(6).lean()
 
     	]).then((result)=>{
-    		// [ktlm1,dpk1,mgr1,ktlm6,dpk6,mgr6]=result;
+    		// [ktlm1,dpk1,mgr1,kdgpt1,ktlm6,dpk6,mgr6,kdgpt6]=result;
     		[ktlm1,ktlm6]=result;
+    		// console.log(result)
     		tmaKtlm=ktlm1.tma[0]
     		// tmaDpk=dpk1.tma[0]
     		// tmaMgr=mgr1.tma[0]
+    		// tmaKdgpt=kdgpt1.tma[0]
 
     		ichKtlm = ktlm6[0].ch[0]
     		// ichDpk = dpk6[0].ch[0] - dpk6[dpk6.length-1].ch[0]
     		// ichMgr = mgr6[0].ch[0] - mgr6[mgr6.length-1].ch[0]
+    		// ichKdgpt = Kdgpt6[0].ch[0] - Kdgpt6[Kdgpt6.length-1].ch[0]
 
     		data=[{
-    			'site' : 221,
+    			'site' : 331,
     			'tma' : tmaKtlm,
     			'ich' : ichKtlm
     		// },{'site' : 222, 
@@ -69,6 +74,9 @@ function decisionOn(){
     		// },{'site' : 223, 
     		// 	'tma': tmaMgr,
     		// 	'ich' : ichMgr
+    		// },{'site' : 331, 
+    		// 	'tma': tmaKdgpt,
+    		// 	'ich' : ichKdgpt
     		}]
 
     		data.forEach((data)=>{
@@ -90,6 +98,7 @@ function decisionOn(){
 				statusTma = (st,tma)=>{
 					return st==221 ? decisionTma(tma,300,200,80):
 					st==222 ? decisionTma(tma,200,150,80):
+					st==331 ? decisionTma(tma,300,200,80):
 					decisionTma(tma,200,150,80)
 				}
 				statusIch =(st)=>{
@@ -124,8 +133,8 @@ function decisionOn(){
 					  dt: new Date(moment().add(7,'hours').format()),
 					  site: st,
 					  tma: tma,
-					  ich: ich,
-					  vair: data.vair,
+					  ch: data.ich,
+					  vair: ktlm1.vair[0],
 					  kondisi: statusIch[1],
 					  status: statusTma[1]
 					});

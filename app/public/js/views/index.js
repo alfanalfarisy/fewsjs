@@ -3,8 +3,8 @@ $('#dateReq').attr({'min':moment(oldDps.dt).format("YYYY-MM-DD"),'max':moment(ne
 var date = $('#dateReq').val();
 var optSite = $('#optSite').val();
 socket.emit('beranda',{status:'connect',date:date,site:optSite});
-$('#siteNameCok').text('KATULAMPA');
-tabell(datas['221'],250,150,80,'KATULAMPA');
+$('#siteNameCok').text('KEDUNGGUPIT');
+tabell(datas['331'],250,150,80,'KEDUNGGUPIT');
 socket.on('berandaData',function(msg){
     succReq()
     var stMd=msg.stMd;

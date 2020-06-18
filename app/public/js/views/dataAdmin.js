@@ -5,7 +5,9 @@ var ve = $("#valueEnd").val('999');
 var vc = $("#valueChoose").val('tma')
 
 $('#startDate').attr({'min':moment(oldDps.dt).format("YYYY-MM-DD"),'max':moment(newDps.dt).format("YYYY-MM-DD")})
-$('#endDate').attr({'min':moment(oldDps.dt).format("YYYY-MM-DD"),'max':moment(newDps.dt).format("YYYY-MM-DD")})
+$('#endDate').attr({'min':moment(oldDps.dt).format("YYYY-MM-DD"),'max':moment(newDps.dt).add(1,'days').format("YYYY-MM-DD")})
+$('#startDateDpcd').attr({'min':moment(oldDpcd.dt).format("YYYY-MM-DD"),'max':moment(newDpcd.dt).format("YYYY-MM-DD")})
+$('#endDateDpcd').attr({'min':moment(oldDpcd.dt).format("YYYY-MM-DD"),'max':moment(newDpcd.dt).add(1,'days').format("YYYY-MM-DD")})
 
 function save(){
     dataSave = {
@@ -45,6 +47,7 @@ $('#btnSearch').click(function(){
 
 })            
 socket.on('dataDpsReq',function(msg){
+    console.log(msg)
     succReq()
     if(msg.resp.length==0){
         alert("Data DPS tidak ditemukan!");
@@ -65,8 +68,9 @@ $('#btnSearchDpcd').click(function(){
 
 })
 socket.on('DataDpcd',(data)=>{
-    array=[data['221'],data['222'],data['223']]
+    array=[data['221'],data['222'],data['223'],data['331']]
     var data = [].concat.apply([], array)
+    
     plotTblDpcd(data)
 })
 

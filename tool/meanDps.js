@@ -16,7 +16,8 @@ var dpsMainSchema = new Schema({
 
 //MongoDB Config
 var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
-var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps');
+// var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps');
+var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps_tes');
 var DpsTemp = connection.model('DpsTemp', dpsMainSchema,'temp_dps');
 
 var socket = require('socket.io-client')('http://localhost:3000');
@@ -34,7 +35,8 @@ function mean(){
 	var start = moment().add(7,'hours').format();
 	var m = moment().minutes();
 
-	if(m==10||m==20||m==30|m==40||m==50||m==0){
+	// if(m==40){
+	if(m==10||m==20||m==30|m==46||m==50||m==0){
 		var end = moment().add(7,'hours').subtract(10, 'minutes').format(); 	 	
 		console.log('Range data data : ', [start,end])
 		console.log('Proses pengambilan nilai rata-rata 10 menit ...')
@@ -42,6 +44,7 @@ function mean(){
 		st.forEach(function(st){
 			//	query data last 10 minute
 			DpsTemp.find({'site':st,'dt':{$lt:start,$gt:end}}).lean().exec(function(err,res){
+			// DpsTemp.find({'site':st}).lean().exec(function(err,res){
 				console.log('Pengambilan nilai rata-rata untuk pos pengamatan', st)
 				console.log('Jumlah record data :', res.length)
 				console.table(res)
@@ -128,7 +131,7 @@ function mean(){
 		})
 
 	
-		setTimeout(()=>{socket.emit('meanDone', true)},700)
+		setTimeout(()=>{socket.emit('meanDone', true)},500)
 
 	}
 }

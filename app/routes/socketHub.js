@@ -34,12 +34,7 @@ function socket(io){
 		var start = new Date(moment().add(7,'hours').format('YYYY-MM-DD'));
 		var end = new Date(moment().add(7,'hours').add(1, 'day').format('YYYY-MM-DD')); 
 
-		// var start = new Date('2019-12-07');
-		// var end = new Date('2019-12-07');
-		// end.setDate(end.getDate() + 1);
-
-
-		var stBeranda=221
+		var stBeranda=331
 		var stSite;
 		SocketServ.newestDps(socket)		
 		SocketServ.sttsValid(socket)		
@@ -192,15 +187,17 @@ function socket(io){
 		socket.on('reqSearch', function(msg){
 			var socketid=msg.id
 			var site=msg.site
-			var siteOpt=(site)=>{return site=='all' ? [221,222,223] : [Number(site)]}
+			var siteOpt=(site)=>{return site=='all' ? [221,222,223,331] : [Number(site)]}
 			var sc = siteOpt(site)
 			console.log(sc)
 			var de = new Date(msg.de)
 			var ds = new Date(msg.ds)
+			var reqPar = msg.vc+'.0'
+
 
 			DpsMain.find({
 				site : {$in : sc},
-				[msg.vc]:{$gt: Number(msg.vs), $lt: Number(msg.ve)},		
+				[reqPar]:{$gte: Number(msg.vs), $lte: Number(msg.ve)},		
 				dt :{$gt: ds, $lt: de}
 				
 			},function(err, resp){	
@@ -213,9 +210,8 @@ function socket(io){
 			var socketid=msg.id
 			var de = new Date(msg.de)
 			var ds = new Date(msg.ds)
-
 			DpcdMain.find({		
-				dt :{$gt: ds, $lt: de}
+				dt :{$gte: ds, $lte: de}
 				
 			},function(err, resp){	
 				socket.emit('dataDpcdReq',{resp})						

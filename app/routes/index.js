@@ -38,20 +38,20 @@ function socket(io){
 				Promise.all([
 					DpsMain.find({}).sort({'dt':1}).limit(1),
 					DpsMain.find({}).sort({'dt':-1}).limit(1),
-				  DpsMain.find({site:221,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
-				  DpsMain.findOne({site:221,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
-				  DpsMain.findOne({site:222,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
-				  DpsMain.findOne({site:223,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
-				  DpsMain.findOne({site:331,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
-				  DataSite.find({})
+					DpsMain.find({site:331,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
+					DpsMain.findOne({site:221,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
+					DpsMain.findOne({site:222,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
+					DpsMain.findOne({site:223,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
+					DpsMain.findOne({site:331,'dt':{$gt:start,$lt:end}}).sort({'dt' : -1}).lean(),
+					DataSite.find({})
 				])
 				.then(results=>{
 
-					var [oldDps,newDps,ktlmp,ktlmp1,dpk1,mgr1,wwr1,dataSite] = results;
+					var [oldDps,newDps,wwr,ktlmp1,dpk1,mgr1,wwr1,dataSite] = results;
 					var data = {
 						'oldDps':oldDps[0],
 						'newDps':newDps[0],
-						'221' : ktlmp,
+						'331' : wwr,
 						'221one' : ktlmp1,
 						'222one' : dpk1,
 						'223one' : mgr1,
@@ -118,7 +118,7 @@ function socket(io){
 	router.get('/site/:reqsite', function(req, res){
 		
 		var siteReq = Number(req.params.reqsite);
-		title={'221':'KTLMP','222':'DEPOK','223':'MANGGARAI','331' : 'WAWAR'}
+		title={'221':'KTLMP','222':'DEPOK','223':'MANGGARAI','331' : 'KEDUNGGUPIT'}
 		title='FEWS | '+title[siteReq]
 		
 

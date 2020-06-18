@@ -1,6 +1,6 @@
 var mqtt = require('mqtt');
 var mongoose = require('mongoose');
-var Topic = 'dpswwr'; 
+var Topic = 'dpswwrmain'; 
 // var Broker_URL = 'mqtt://test.mosquitto.org';
 var Broker_URL = 'mqtt://broker.mqttdashboard.com';
 var options = {
@@ -37,7 +37,7 @@ var dpsTempSchema = new Schema({
 
 //MongoDB Config
 var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
-var DpsTemp = connection.model('DpsTemp', dpsTempSchema,'temp_dps');
+var DpsTemp = connection.model('DpsTemp', dpsTempSchema,'main_dps');
 
 function mqtt_connect() {
     console.log("Connecting MQTT");

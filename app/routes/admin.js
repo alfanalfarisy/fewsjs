@@ -3,6 +3,7 @@ var router = express.Router();
 var crypto = require('crypto');
 var DpsMain = require('../models/dpsMain');
 var DpsTemp = require('../models/dpsTemp');
+var DpcdMain = require('../models/dpcdMain');
 var DataSite = require('../models/dataprofilessite');
 var User = require('../models/users');
 var subscribers = require('../models/subscribers');
@@ -27,24 +28,24 @@ function socket(io){
     	next();
 	});
 
-	// router.get('/',Auth_mdw.check_login, Auth_mdw.is_admin,function(req, res, next){
-	// 	session_store = req.session;
-	// 	res.render('admin/index',{session_store:session_store});
-	// })
 
 	router.get('/data',Auth_mdw.check_login,Auth_mdw.is_admin,function(req, res, next){
 		title='FEWS | Data'
 		session_store = req.session;
 
 		Promise.all([
+			DpcdMain.find({}).sort({'dt':1}).limit(1),
+			DpcdMain.find({}).sort({'dt':-1}).limit(1),
 			DpsMain.find({}).sort({'dt':1}).limit(1),
 			DpsMain.find({}).sort({'dt':-1}).limit(1),
 			DpsMain.find({'dt':{$gt:start,$lt:end}}),
 			DpsTemp.find({'dt':{$gt:start,$lt:end}}),
 			DataSite.find({}),
 		]).then(result=>{
-			[oldDps,newDps,dps,dpsTemp,dataSite]=result;
+			[oldDpcd,newDpcd,oldDps,newDps,dps,dpsTemp,dataSite]=result;
 			data={
+				'oldDpcd':oldDpcd[0],
+				'newDpcd':newDpcd[0],
 				'oldDps':oldDps[0],
 				'newDps':newDps[0],
 				'dps':dps,
