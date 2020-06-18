@@ -1,13 +1,13 @@
 var mqtt = require('mqtt');
 var mongoose = require('mongoose');
-var Topic = 'dpcdclwg'; 
+var Topic = 'dpcdwwr'; 
 // var Broker_URL = 'mqtt://test.mosquitto.org';
 var Broker_URL = 'mqtt://broker.mqttdashboard.com';
 var options = {
-	clientId: 'cik',
+	// clientId: '',
 	port: 1883,
-	username: 'cik',
-	password: 'cik',	
+	// username: '',
+	// password: '',	
 	keepalive : 60
 };
 
@@ -26,13 +26,14 @@ var dpcdMainSchema = new Schema({
 	dt: Date,
 	lx: [Number,Number],
 	t: [Number,Number],
-	stc: Number,
+	skb: [Number,Number],
+	edb: [Number,Number],
+	wps: [Number,Number],
+	fwps: [Number,Number],
 	vpr: [Number,Number],
-	vrb: [Number,Number],
 	vbr: [Number,Number],
 	vrl: [Number,Number],
 	ipr: [Number,Number],
-	irb: [Number,Number],
 	ibr: [Number,Number],
 	irl: [Number,Number]
 },
@@ -95,15 +96,16 @@ function mqtt_messsageReceived(topic, message, packet) {
 		'dt': dt,
 		'lx': qc(array[2],0,2000),
 		't': qc(array[3],-40,820),
-		'stc': array[4],
-		'vpr': qc(array[5],0,2000),
-		'vrb': qc(array[6],0,2000),
-		'vbr': qc(array[7],0,2000),
-		'vrl': qc(array[8],0,2000),
-		'ipr': qc(array[9],0,2000),
-		'irb': qc(array[10],0,2000),
-		'ibr': qc(array[11],0,2000),
-		'irl': qc(array[12],0,2000)	
+		'skb': qc(array[4],-40,820),
+		'edb': qc(array[5],-40,820),
+		'wps': qc(array[6],-40,820),
+		'fwps': qc(array[7],-40,820),
+		'vpr': qc(array[8],0,2000),
+		'vbr': qc(array[9],0,2000),
+		'vrl': qc(array[10],0,2000),
+		'ipr': qc(array[11],0,2000),
+		'ibr': qc(array[12],0,2000),
+		'irl': qc(array[13],0,2000)	
 	}
 	console.log('proses pengendalian mutu data')
 	console.log(data)
@@ -114,13 +116,14 @@ function mqtt_messsageReceived(topic, message, packet) {
 	  dt: dt,
 	  lx: data.lx,
 	  t: data.t,
-	  stc: data.stc,
+	  skb: data.skb,
+	  edb: data.edb,
+	  wps: data.wps,
+	  fwps: data.fwps,
 	  vpr: data.vpr,
-	  vrb: data.vrb,
 	  vbr: data.vbr,
 	  vrl: data.vrl,
 	  ipr: data.ipr,
-	  irb: data.irb,
 	  ibr: data.ibr,
 	  irl: data.irl
 	});

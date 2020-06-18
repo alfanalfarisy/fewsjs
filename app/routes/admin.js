@@ -30,6 +30,7 @@ function socket(io){
 
 
 	router.get('/data',Auth_mdw.check_login,Auth_mdw.is_admin,function(req, res, next){
+	// router.get('/data',function(req, res, next){
 		title='FEWS | Data'
 		session_store = req.session;
 
@@ -108,13 +109,18 @@ function socket(io){
 	})
 
 	router.get('/broadcast',Auth_mdw.check_login, Auth_mdw.is_admin,function(req,res,next){
-	// router.get('/control',function(req,res,next){
-		title='FEWS | Control'
-		res.render('admin/control',{title:title});
+	// router.get('/broadcast',function(req,res,next){
+		title='FEWS | broadcast'
+		DataSite.find({},(err,resp)=>{
+			res.render('admin/control',{title:title,siteData:resp});
+		})
 	})
 	router.get('/qc',Auth_mdw.check_login, Auth_mdw.is_admin,function(req,res,next){
+	// router.get('/qc',function(req,res,next){
 		title='FEWS | QC'
-		res.render('admin/qc',{title:title});
+		DataSite.find({},(err,resp)=>{
+			res.render('admin/qc',{title:title,siteData:resp});
+		})		
 	})
 
 }

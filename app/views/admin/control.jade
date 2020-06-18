@@ -2,14 +2,14 @@ extends ../layout/base
 
 block content
 	.row(style="margin:0px;")
-		.col-md-2.order-3
+		//- .col-md-2.order-3
 			.card(style="height:;")
 				.card-header.info-color.white-text.text-center.py-4
 					strong SWITCH
 				.card-body
 						input#validasi.form-control(type='text', placeholder='Text Validation')
 						button.form-control.btn-danger#btnSend.mt-2 ACTION
-		.col-md-5.order-2
+		.col-md-6.order-2
 			.card
 				.card-header.info-color.white-text.text-center.py-4
 					strong Broadcast Info Custom
@@ -25,7 +25,7 @@ block content
 								| max 30 words
 						button.btn.btn-outline-info.btn-rounded.btn-block.my-4.waves-effect.z-depth-0#btnPushCustom(type='') Push Notif
 						button.btn.btn-outline-info.btn-rounded.btn-block.my-4.waves-effect.z-depth-0#btnWaCustom(type='') Whatsapp
-		.col-md-5.order-1
+		.col-md-6.order-1
 			.card
 				.card-header.info-color.white-text.text-center.py-4
 					strong Broadcast Info Default
@@ -35,10 +35,9 @@ block content
 
 							label.col-sm-4.col-form-label(for='siteOpt') Stasiun
 							.col-sm-8
-								select.form-control#siteOpt
-									option Katulampa
-									option Depok
-									option Manggarai
+								select.custom-select.form-control#optSite
+									for site in siteData
+										option(value="#{site.site}") #{site.pos}
 							label.col-sm-4.col-form-label.mt-2(for='ichOpt') ICH
 							.col-sm-8.mt-2
 								select.form-control#ichOpt
@@ -75,4 +74,6 @@ block content
 block script
 	script.
 		var socket = io.connect(BASE_URL)
+		// var siteData= !{siteData}
+		// console.log(siteData)
 	script(src="/js/views/broadcastNControl.js")

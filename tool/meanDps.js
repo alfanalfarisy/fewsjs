@@ -9,7 +9,6 @@ var dpsMainSchema = new Schema({
 	tma: [Number,Number],
 	vair: [Number,Number],
 	ch: [Number,Number]
-
 	},{
 		timestamps: true
 	});

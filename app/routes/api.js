@@ -5,7 +5,7 @@ const DpsMain = require('../models/dpsMain');
 const Users = require('../models/users');
 const DpcdMain = require('../models/dpcdMain');
 const Site = require('../models/dataprofilessite');
-
+var moment = require('moment');
 
 	router.get('/allsite1', function(req, res, next) {
 		Promise.all([
@@ -33,21 +33,21 @@ const Site = require('../models/dataprofilessite');
 	router.get('/manipulasi',function(req,res,next){
 		var date = new Date('2019-12-01');
 		// console.log(date)
+		var dateM=moment('2020-06-10')
 		var dt=[];
-		for(i=0; i<1000; i++){
-			
+		for(i=0; i<1263; i++){
 			rand=Math.floor(Math.random() * 200) + 50
 			dbt=Math.floor(Math.random() * 50) + 20
 			ch=Math.floor(Math.random() * 30) + 0
-			date.setMinutes(date.getMinutes() + 10)
-			dat=date.toISOString()
-			
+			// date.setMinutes(date.getMinutes() + 10)
+			// dat=date.toISOString()
+			dateM = dateM.add(10,'minutes')
 			var doc= {
-				"dt" : 'xxnew Date('+''+dat+''+')yy',
-				"site" :'xxNumberLong('+331+')yy',
-				"tma" : 'xx[NumberLong('+rand+'),NumberLong('+1000+')]yy', 	
-				"dbt" : 'xx[NumberLong('+dbt+'),NumberLong('+1000+')]yy', 	
-				"ch" : 'xx['+ch+',NumberLong('+1000+')]yy' 	
+				"dt" : {"$date": new Date(dateM)},
+				"site" :331,
+				"tma" : [rand,1000], 	
+				"vair" : [dbt,1000], 	
+				"ch" : [ch,1000] 	
 			}
 
 			dt.push(doc)

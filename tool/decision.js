@@ -41,42 +41,43 @@ function decisionOn(){
 	var end = moment().subtract(60, 'minutes').format(); 	
 
     Promise.all([
-    	DpsMain.findOne({'site':221}).sort({'dt':-1}).lean(),
+    	// DpsMain.findOne({'site':221}).sort({'dt':-1}).lean(),
     	// DpsMain.findOne({'site':222}).sort({'dt':-1}).lean(),
     	// DpsMain.findOne({'site':223}).sort({'dt':-1}).lean(),
-    	// DpsMain.findOne({'site':331}).sort({'dt':-1}).lean(),
-    	DpsMain.find({'site':221}).sort({'dt':-1}).limit(6).lean(),
+    	DpsMain.findOne({'site':331}).sort({'dt':-1}).lean(),
+    	// DpsMain.find({'site':221}).sort({'dt':-1}).limit(6).lean(),
     	// DpsMain.find({'site':222}).sort({'dt':-1}).limit(6).lean(),
     	// DpsMain.find({'site':223}).sort({'dt':-1}).limit(6).lean()
-    	// DpsMain.find({'site':331}).sort({'dt':-1}).limit(6).lean()
+    	DpsMain.find({'site':331}).sort({'dt':-1}).limit(6).lean()
 
     	]).then((result)=>{
     		// [ktlm1,dpk1,mgr1,kdgpt1,ktlm6,dpk6,mgr6,kdgpt6]=result;
-    		[ktlm1,ktlm6]=result;
+    		[kdgpt1,kdgpt6]=result;
     		// console.log(result)
-    		tmaKtlm=ktlm1.tma[0]
+    		// tmaKtlm=ktlm1.tma[0]
     		// tmaDpk=dpk1.tma[0]
     		// tmaMgr=mgr1.tma[0]
-    		// tmaKdgpt=kdgpt1.tma[0]
+    		tmaKdgpt=kdgpt1.tma[0]
 
-    		ichKtlm = ktlm6[0].ch[0]
+    		// ichKtlm = ktlm6[0].ch[0] -ktlm6[ktlm6.length-1].ch[0]
     		// ichDpk = dpk6[0].ch[0] - dpk6[dpk6.length-1].ch[0]
     		// ichMgr = mgr6[0].ch[0] - mgr6[mgr6.length-1].ch[0]
-    		// ichKdgpt = Kdgpt6[0].ch[0] - Kdgpt6[Kdgpt6.length-1].ch[0]
+    		ichKdgpt = Kdgpt6[0].ch[0] - Kdgpt6[Kdgpt6.length-1].ch[0]
 
     		data=[{
-    			'site' : 331,
-    			'tma' : tmaKtlm,
-    			'ich' : ichKtlm
+    			// 'site' : 331,
+    			// 'tma' : tmaKtlm,
+    			// 'ich' : ichKtlm
     		// },{'site' : 222, 
     		// 	'tma': tmaDpk,
     		// 	'ich' : ichDpk
     		// },{'site' : 223, 
     		// 	'tma': tmaMgr,
     		// 	'ich' : ichMgr
-    		// },{'site' : 331, 
-    		// 	'tma': tmaKdgpt,
-    		// 	'ich' : ichKdgpt
+    		// },{
+    			'site' : 331, 
+    			'tma': tmaKdgpt,
+    			'ich' : ichKdgpt
     		}]
 
     		data.forEach((data)=>{

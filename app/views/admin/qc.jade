@@ -1,156 +1,6 @@
 extends ../layout/base
 block content	
 	section.content
-			.row
-				.col-md-6.col-sm-6
-					.card
-						.card-header: .card-title
-								strong Pos Katulampa
-						.card-body
-							.row
-								.col-4.border
-									.row: .col-12.border Batterai Utama 
-									.row: .col-12.border 
-								.col-8
-									.row 
-										.col-6.border Updated DPS 
-										.col-6.border.dtDpsKtlmp 
-									.row 
-										.col-6.border Updated DPCD 
-										.col-6.border.dtDpcdKtlmp
-									.row
-										.col-6.border Tegangan 
-										.col-6.border.vKtlmp 
-									.row
-										.col-6.border Estimasi
-										.col-6.border.eDKtlmp
-									.row
-										.col-6.border Status
-										.col-6.border.sCKtlmp
-							.row
-								.col-4.border TMA
-								.col-4.border.tmaKtlmp
-								.col-4.border.KondTmaKtlmp
-							.row
-								.col-4.border Laju Air
-								.col-4.border.vKtlmp
-								.col-4.border.KondVKtlmp
-							.row
-								.col-4.border Curah Hujan
-								.col-4.border.chKtlmp
-								.col-4.border.KondChKtlmp
-				.col-md-6.col-sm-6
-					.card
-						.card-header:.card-title
-								strong Pos Depok
-						.card-body
-							.row
-								.col-4.border
-									.row: .col-12.border Batterai Utama 
-									.row: .col-12.border 
-								.col-8
-									.row 
-										.col-6.border Updated DPS 
-										.col-6.border.dtDpsDpk 
-									.row 
-										.col-6.border Updated DPCD 
-										.col-6.border.dtDpcdDpk
-									.row
-										.col-6.border Tegangan 
-										.col-6.border.vDpk 
-									.row
-										.col-6.border Estimasi
-										.col-6.border.eDDpk
-									.row
-										.col-6.border Status
-										.col-6.border.sCDpk
-							.row
-								.col-4.border TMA
-								.col-4.border.tmaDpk
-								.col-4.border.KondTmaDpk
-							.row
-								.col-4.border Laju Air
-								.col-4.border.vDpk
-								.col-4.border.KondVDpk
-							.row
-								.col-4.border Curah Hujan
-								.col-4.border.chDpk
-								.col-4.border.KondChDpk
-				.col-md-6.col-sm-6
-					.card
-						.card-header:.card-title
-								strong Pos Manggarai
-						.card-body
-							.row
-								.col-4.border
-									.row: .col-12.border Batterai Utama 
-									.row: .col-12.border 
-								.col-8
-									.row 
-										.col-6.border Updated DPS 
-										.col-6.border.dtDpsMgr 
-									.row 
-										.col-6.border Updated DPCD 
-										.col-6.border.dtDpcdMgr
-									.row
-										.col-6.border Tegangan 
-										.col-6.border.vMgr 
-									.row
-										.col-6.border Estimasi
-										.col-6.border.eDMgr
-									.row
-										.col-6.border Status
-										.col-6.border.sCMgr
-							.row
-								.col-4.border TMA
-								.col-4.border.tmaMgr
-								.col-4.border.KondTmaMgr
-							.row
-								.col-4.border Laju Air
-								.col-4.border.vMgr
-								.col-4.border.KondVMgr
-							.row
-								.col-4.border Curah Hujan
-								.col-4.border.chMgr
-								.col-4.border.KondChMgr
-				.col-md-6.col-sm-6
-					.card
-						.card-header:.card-title
-								strong Pos Wawar
-						.card-body
-							.row
-								.col-4.border
-									.row: .col-12.border Batterai Utama 
-									.row: .col-12.border 
-								.col-8
-									.row 
-										.col-6.border Updated DPS 
-										.col-6.border.dtDpsWwr 
-									.row 
-										.col-6.border Updated DPCD
-										.col-6.border.dtDpcdWwr
-									.row
-										.col-6.border Tegangan 
-										.col-6.border.vWwr 
-									.row
-										.col-6.border Estimasi
-										.col-6.border.eDWwr
-									.row
-										.col-6.border Status
-										.col-6.border.sCWwr
-							.row
-								.col-4.border TMA
-								.col-4.border.tmaWwr
-								.col-4.border.KondTmaWwr
-							.row
-								.col-4.border Laju Air
-								.col-4.border.vWwr
-								.col-4.border.KondVWwr
-							.row
-								.col-4.border Curah Hujan
-								.col-4.border.chWwr
-								.col-4.border.KondChWwr
-
 		.row
 			.col-md-8
 					.card
@@ -159,26 +9,49 @@ block content
 						#iChart 
 
 			.col-md-4
+				h6 PILIH SITE
 				.card
-					.btn-group(role="group")
-						button#optionChartKtlmp.btn.btn-primary Ktlmp
-						button#optionChartDpk.btn.btn-primary Dpk
-						button#optionChartMgr.btn.btn-primary Mgr
-						button#optionChartWwr.btn.btn-primary Wwr
+					.row
+						.col-8
+							select.custom-select.form-control#optSite
+								for site in siteData
+									option(value="#{site.site}") #{site.pos}
+						.col-4
+							input(type='submit' value='GET' style='height:100%').form-control.btn-light#getBtn
 				.card
-					.card-header LAST RECORD
+					.card-header DPS STATUS
+						span.siteDps
+					.card-body
+						table.table
+							
+							tr: td Updated
+								td.dtDps
+							tr: td TMA
+								td.KondTma
+							tr: td CH
+								td.KondCh
+							tr: td V Air
+								td.KondV
+							
+				.card
+					.card-header LAST RECORD 
+						span.site
 					.card-body
 						table.table
 							tr: td Datetime
 								td.dt
 							tr: td Lux
 								td.lx 
-							tr: td Daya Solar Panel
-								td.p
 							tr: td Suhu Logger
 								td.t
-							tr: td Watt Peak
-								td.wp
+							tr: td Sisa Kapasitas Baterai
+								td.skb
+							tr: td Estimasi Daya Baterai
+								td.edb
+							tr: td Daya solar panel
+								td.wps
+							tr: td Fungsi Daya solar panel
+								td.fwps
 
 						table.table.table-bordered
 							thead
@@ -191,22 +64,17 @@ block content
 									td.vpr
 									td.ipr
 								tr
-									td Regulator Baterai
-									td.vrb
-									td.irb
-								tr
 									td Batterai Regulator
 									td.vbr
 									td.ibr
 								tr
 									td Regulator Beban
-									td.vrb
-									td.irb
+									td.vrl
+									td.irl
 
 
 
 block script
 	script.
 		var socket = io.connect(BASE_URL);
-		
 	script(src="/js/views/qc.js")

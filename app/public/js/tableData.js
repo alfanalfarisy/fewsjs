@@ -1,22 +1,24 @@
 
 function plotTblDpcd(datasDpcd){
     var dataSet = [];
+    console.log(dataSet)
     datasDpcd.forEach(function(data){     
 
         st=kodest(data.site)
         dt=data.dt;
         lx=data.lx[0]
         t=data.t[0]
-        stc=data.stc
+        skb=data.skb[0]
+        edb=data.edb[0]
+        wps=data.wps[0]
+        fwps=data.fwps[0]
         vpr=data.vpr[0]
-        vrb=data.vrb[0]
         vbr=data.vbr[0]
         vrl=data.vrl[0]
         ipr=data.ipr[0]
-        irb=data.irb[0]
         ibr=data.ibr[0]
         irl=data.irl[0]
-        dataSet.push([st,dt,lx,t,stc,vpr,vrb,vbr,vrl,ipr,irb,ibr,irl]);
+        dataSet.push([st,dt,lx,t,skb,edb,wps,fwps,vpr,vbr,vrl,ipr,ibr,irl]);
         })
 
     $('.dataTableDpcd').DataTable( {
@@ -34,13 +36,14 @@ function plotTblDpcd(datasDpcd){
             { title: "Dt" },
             { title: "lx" },
             { title: "t" },
-            { title: "stc" },
-            { title: "vpr" },
-            { title: "vrb" },
+            { title: "skb" },
+            { title: "edb" },
+            { title: "wps" },
+            { title: "fwps" },
+            { title: "pr" },
             { title: "vbr" },
             { title: "vrl" },
             { title: "ipr" },
-            { title: "irb" },
             { title: "ibr" },
             { title: "irl" }
 
