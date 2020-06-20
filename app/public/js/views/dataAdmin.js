@@ -68,16 +68,18 @@ $('#btnSearchDpcd').click(function(){
 
 })
 socket.on('DataDpcd',(data)=>{
-    array=[data['221'],data['222'],data['223'],data['331']]
-    var data = [].concat.apply([], array)
-    
-    plotTblDpcd(data)
+    // array=[data['331']]
+    // var data = [].concat.apply([], array)
+    // console.log(data[331])
+    if(data[331].length>0){
+        plotTblDpcd(data[331])
+    }
 })
 
 socket.on('dataDpcdReq',(data)=>{
     if(data.resp.length==0){
         alert("Data DPCD tidak ditemukan!");
     }
-    plotTblDpcd(data.resp)
+        plotTblDpcd(data.resp)
 
 })

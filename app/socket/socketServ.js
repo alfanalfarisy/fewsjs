@@ -59,22 +59,17 @@ var SttsValid=(socket)=>{
     })	
 }
 
-var AllDpcd = (socket)=>{
+var AllDpcd = (socket,site,start,end)=>{
     Promise.all([
-        DpcdMain.find({site:221}).sort({'_id': -1}),		
-        DpcdMain.find({site:222}).sort({'_id': -1}),		
-        DpcdMain.find({site:223}).sort({'_id': -1}),
-        DpcdMain.find({site:331}).sort({'_id': -1})
+        // DpcdMain.find({'site':site}).sort({'_id': -1}), 
+        DpcdMain.find({site:site,'dt':{$gte:start,$lte:end}}).sort({'_id': -1}), 
     ]).then(result=>{
-        const [ktlmp,dpk,mgr,wwr]=result;
+        const [resp]=result;
         
         var data={
-            '221' : ktlmp,
-            '222' : dpk,
-            '223' : mgr,
-            '331' : wwr,
+            [site] : resp,
         }
-
+        console.log(data)
         socket.emit('DataDpcd',data)
     })
 }

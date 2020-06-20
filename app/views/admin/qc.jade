@@ -3,23 +3,33 @@ block content
 	section.content
 		.row
 			.col-md-8
-					.card
-						#vChart
-					.card
-						#iChart 
+					.card.border-primary
+						.card-header: .text-center
+							strong CHART REALTIME TEGANGAN - WAKTU
+						.card-body
+							#vChart
+					.card.border-primary
+						.card-header: .text-center
+							strong CHART REALTIME ARUS - WAKTU
+						.card-body
+							#iChart
 
 			.col-md-4
-				h6 PILIH SITE
-				.card
-					.row
-						.col-8
+				.card.border-primary
+					.card-header Option
+					.card-body: .row.no-gutters
+						.col-2 
+							h6.ml-2 Date :
+							h6.ml-2 POS :
+						.col-6
+							input(type='date').form-control#dateReq
 							select.custom-select.form-control#optSite
-								for site in siteData
+								for site in dataSite
 									option(value="#{site.site}") #{site.pos}
 						.col-4
 							input(type='submit' value='GET' style='height:100%').form-control.btn-light#getBtn
-				.card
-					.card-header DPS STATUS
+				.card.border-primary
+					.card-header DPS STATUS POS : 
 						span.siteDps
 					.card-body
 						table.table
@@ -33,8 +43,8 @@ block content
 							tr: td V Air
 								td.KondV
 							
-				.card
-					.card-header LAST RECORD 
+				.card.border-primary
+					.card-header LAST RECORD DPCD POS : 
 						span.site
 					.card-body
 						table.table
@@ -71,10 +81,35 @@ block content
 									td Regulator Beban
 									td.vrl
 									td.irl
+		
+		.card.border-primary
+				.text-center.mt-2
+					strong TABLE REALTIME HARIAN
+				.card-body.border-primary
+					.table-responsive(style="height:400px;overlay:auto;")
+						table.table.thead-dark
+							thead
+								td Site
+								td date
+								td Lux
+								td T
+								td SKB
+								td EDB
+								td WPS
+								td FWPS
+								td VBR
+								td VPR
+								td VRL
+								td IBR
+								td IPR
+								td IRL
+							tbody#tblContent
 
 
 
 block script
 	script.
+		$('#dateReq').val(moment().add(7,'hours').format('YYYY-MM-DD'))
 		var socket = io.connect(BASE_URL);
+		siteData= !{siteData}
 	script(src="/js/views/qc.js")

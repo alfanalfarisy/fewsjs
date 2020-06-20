@@ -39,7 +39,7 @@ function socket(io){
 			DpcdMain.find({}).sort({'dt':-1}).limit(1),
 			DpsMain.find({}).sort({'dt':1}).limit(1),
 			DpsMain.find({}).sort({'dt':-1}).limit(1),
-			DpsMain.find({'dt':{$gt:start,$lt:end}}),
+			DpsMain.find({'dt':{$gte:start,$lte:end}}),
 			DpsTemp.find({'dt':{$gt:start,$lt:end}}),
 			DataSite.find({}),
 		]).then(result=>{
@@ -119,7 +119,8 @@ function socket(io){
 	// router.get('/qc',function(req,res,next){
 		title='FEWS | QC'
 		DataSite.find({},(err,resp)=>{
-			res.render('admin/qc',{title:title,siteData:resp});
+			console.log(resp)
+			res.render('admin/qc',{title:title,siteData:JSON.stringify(resp),dataSite:resp});
 		})		
 	})
 

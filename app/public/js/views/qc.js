@@ -1,4 +1,7 @@
-siteOpt = 331
+var siteReq = 331
+
+function pos(siteReq){return siteData.filter(x=>{return x.site==siteReq})[0].pos
+}
 
 var kond	
 var kondData = (kond)=>{
@@ -53,7 +56,7 @@ function chart(site,dpcd){
 }
 function lastrecord(site,dpcd){
     data=dpcd[site][0]
-    $('.site').text(data.site)
+    $('.site').text(pos(data.site))
     $('.dt').text(data.dt)
     $('.lx').text(data.lx[0])
     $('.t').text(data.t[0])
@@ -69,9 +72,9 @@ function lastrecord(site,dpcd){
     $('.irl').text(data.irl[0])
 }
 
-function updateDps(data,siteOpt){
-        var dps=data.filter(x=>x.site==siteOpt)[0]
-        $('.siteDps').text(dps.site)
+function updateDps(data,siteReq){
+        var dps=data.filter(x=>x.site==siteReq)[0]
+        $('.siteDps').text(pos(dps.site))
         $('.dtDps').text(dps.dt)
         $('.KondTma').text(kondData(dps.tma[1]))
         $('.KondV').text(kondData(dps.vair[1]))
@@ -83,26 +86,47 @@ function updateDps(data,siteOpt){
 
 socket.on('newestDps',(msg)=>{
     var data=msg.newestDps
-    updateDps(data,siteOpt)
+    updateDps(data,siteReq)
     
     $('#getBtn').click(()=>{
         updateDps(data,$('#optSite').val())
-        siteOpt=$('#optSite').val()
     })
 
 })
 
-setTimeout(()=>{console.log(siteOpt)},5000)
 
+function tbl(data){
+    var tbl;
+    data.forEach(data=>{
+        tbl+= `<tr>
+                    <td>${pos(data.site)}</td>
+                    <td>${data.dt}</td>
+                    <td>${data.lx[0]}</td>
+                    <td>${data.t[0]}</td>
+                    <td>${data.skb[0]}</td>
+                    <td>${data.edb[0]}</td>
+                    <td>${data.wps[0]}</td>
+                    <td>${data.fwps[0]}</td>
+                    <td>${data.vbr[0]}</td>
+                    <td>${data.vpr[0]}</td>
+                    <td>${data.vrl[0]}</td>
+                    <td>${data.ibr[0]}</td>
+                    <td>${data.ipr[0]}</td>
+                    <td>${data.irl[0]}</td>
+                </tr>`
+    })
+    return tbl
+}
 
 socket.on('DataDpcd',(dpcd)=>{
-
-    chart(siteOpt,dpcd);
-    lastrecord(siteOpt,dpcd);
-    
-    $('#getBtn').click(()=>{
-        chart($('#optSite').val(),dpcd)
-        lastrecord($('#optSite').val(),dpcd);
-        siteOpt=$('#optSite').val()
-    })
+    $('#tblContent').after(tbl(dpcd[siteReq]))
+    if(dpcd[siteReq].length>0){
+        chart(siteReq,dpcd);
+        lastrecord(siteReq,dpcd);
+    }
 })
+
+    $('#getBtn').click(()=>{
+        siteReq= $('#optSite').val()
+        socket.emit('dpcdReq',{date:$('#dateReq').val(),site:siteReq})
+    })

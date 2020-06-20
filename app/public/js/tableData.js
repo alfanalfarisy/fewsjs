@@ -1,7 +1,6 @@
 
 function plotTblDpcd(datasDpcd){
     var dataSet = [];
-    console.log(dataSet)
     datasDpcd.forEach(function(data){     
 
         st=kodest(data.site)

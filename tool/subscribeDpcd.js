@@ -94,18 +94,18 @@ function mqtt_messsageReceived(topic, message, packet) {
 	var data={
 		'st': array[0],
 		'dt': dt,
-		'lx': qc(array[2],0,2000),
+		'lx': qc(array[2],0,100000),
 		't': qc(array[3],-40,820),
-		'skb': qc(array[4],-40,820),
-		'edb': qc(array[5],-40,820),
-		'wps': qc(array[6],-40,820),
-		'fwps': qc(array[7],-40,820),
-		'vpr': qc(array[8],0,2000),
-		'vbr': qc(array[9],0,2000),
-		'vrl': qc(array[10],0,2000),
-		'ipr': qc(array[11],0,2000),
-		'ibr': qc(array[12],0,2000),
-		'irl': qc(array[13],0,2000)	
+		'skb': qc(array[4],-40,30000),
+		'edb': qc(array[5],-40,30000),
+		'wps': qc(array[6],-40,30000),
+		'fwps': qc(array[7],-40,30000),
+		'vpr': qc(array[8],0,30000),
+		'vbr': qc(array[9],0,30000),
+		'vrl': qc(array[10],0,30000),
+		'ipr': qc(array[11],0,30000),
+		'ibr': qc(array[12],0,30000),
+		'irl': qc(array[13],0,30000)	
 	}
 	console.log('proses pengendalian mutu data')
 	console.log(data)

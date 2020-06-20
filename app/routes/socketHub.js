@@ -38,9 +38,8 @@ function socket(io){
 		var stSite;
 		SocketServ.newestDps(socket)		
 		SocketServ.sttsValid(socket)		
-		SocketServ.allDpcd(socket)		
+		SocketServ.allDpcd(socket,331,start,end)		
 		
-
 		//Qc
 		socket.on('addUser',(data)=>{
 			// console.log('new data')
@@ -190,15 +189,15 @@ function socket(io){
 			var siteOpt=(site)=>{return site=='all' ? [221,222,223,331] : [Number(site)]}
 			var sc = siteOpt(site)
 			console.log(sc)
-			var de = new Date(msg.de)
-			var ds = new Date(msg.ds)
+			var de = new Date(moment(msg.de))
+			var ds = new Date(moment(msg.ds))
 			var reqPar = msg.vc+'.0'
 
 
 			DpsMain.find({
 				site : {$in : sc},
 				[reqPar]:{$gte: Number(msg.vs), $lte: Number(msg.ve)},		
-				dt :{$gt: ds, $lt: de}
+				'dt' :{$gte: ds, $lte: de}
 				
 			},function(err, resp){	
 				socket.emit('dataDpsReq',{resp})				
@@ -208,14 +207,17 @@ function socket(io){
 
 		socket.on('reqSearchDpcd', function(msg){
 			var socketid=msg.id
-			var de = new Date(msg.de)
-			var ds = new Date(msg.ds)
-			DpcdMain.find({		
-				dt :{$gte: ds, $lte: de}
+			var end = new Date(moment(msg.de))
+			var start = new Date(moment(msg.ds))
+			// console.log([start,end])
+			// DpcdMain.find({		
+			// 	dt :{$gte: ds, $lte: de}
 				
-			},function(err, resp){	
-				socket.emit('dataDpcdReq',{resp})						
-			})
+			// },function(err, resp){	
+			// 	socket.emit('dataDpcdReq',{resp})						
+			// })
+			SocketServ.allDpcd(socket,331,start,end)
+
 
 		})
 
@@ -233,6 +235,15 @@ function socket(io){
 				});
 			})
 		})
+
+		socket.on('dpcdReq',(data)=>{
+			site=Number(data.site)
+			console.log(site)
+			var start = new Date(moment(data.date).add(7,'hours').format('YYYY-MM-DD'));
+			var end = new Date(moment(data.date).add(7,'hours').add(1, 'day').format('YYYY-MM-DD'));
+			SocketServ.allDpcd(socket,site,start,end)
+		})
+
 
 		socket.on('publishSwitch',function(msg){
 			client.publish('switch', '1')
@@ -284,8 +295,7 @@ function socket(io){
 	        })
 		});
 		DpcdMainStream.on('change', (change) => {
-			console.log('OK')
-			SocketServ.allDpcd(socket)	
+			SocketServ.allDpcd(socket,site,start,end)	
 		
 		});
 	});
