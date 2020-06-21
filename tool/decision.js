@@ -16,10 +16,10 @@ var dpsMainSchema = new Schema({
 	});
 var floodRecordSchema = new Schema({
 	dt: Date,
-	site: [Number],
-	tma: [Number],
-	vair: [Number],
-	ch: [Number],
+	site: Number,
+	tma: Number,
+	vair: Number,
+	ch: Number,
 	kondisi : String,
 	status : String
 	},

@@ -1,6 +1,6 @@
 const keys = require('../app/config/keys');
 const accountSid = 'ACfd59eb2e39864f41da9fa597bd98f871'; 
-const authToken = 'fb3d4197345d08595fbd54f070a59585'; 
+const authToken = '23a598be854062dbc9eb9bf2ea54770b'; 
 const client = require('twilio')(accountSid, authToken);
 var moment = require('moment-timezone')
 var mqtt = require('mqtt')
@@ -26,9 +26,10 @@ var usersSchema = new Schema({});
 var subsSchema = new Schema({});
 
 //MongoDB Config
-var connection = mongoose.createConnection('mongodb://projek20:projek20@198.211.106.64:27017/siagabanjir',{useNewUrlParser: true,useUnifiedTopology: true});
-// var connection = mongoose.createConnection('mongodb://projek20:projek20@198.211.106.64:27017/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+// var connection = mongoose.createConnection('mongodb://projek20:projek20@198.211.106.64:27017/siagabanjir',{useNewUrlParser: true,useUnifiedTopology: true});
+var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
 var DpsMain = connection.model('DpsMain', dpsMainSchema,'dpsMain');
+var Flood = connection.model('Flood', dpsMainSchema,'flood_rec');
 var Users = connection.model('Users', usersSchema,'users');
 var Subscription = connection.model('Subscription', subsSchema,'subscribers');
 var socket = require('socket.io-client').connect('http://localhost:3000');
@@ -48,8 +49,6 @@ function sendWhatsappDef(payload,d,t,no){
     console.log('Diseminasi Whatsapp Running..')
     client.messages.create({
         from: 'whatsapp:+14155238886',
-        // body: `Your Attention Required!-----Tanggal:${d}----Waktu:${t}----Pos:${payload.site}---Status:${payload.status}---Kondisi:${payload.kondisi}---TMA:${payload.tma}cm----ICH:${payload.ich}mm code is 112 for emergency`,
-        // msg =  `Your Attention Required!-----Tanggal:${d}----Waktu:${t}----Pos:${pos(payload.site)}---Status:${payload.status}---Kondisi:${payload.kondisi}---TMA:${payload.tma} cm----ICH:${payload.ich} mm----code is 112 for emergency`,
         body:  `Your Attention Required!-----Tanggal:${d}----Waktu:${t}----Pos:${pos(payload.site)}---Status:${payload.status}---Kondisi:${payload.kondisi}---TMA:${payload.tma} cm----ICH:${payload.ich} mm---- code is 112 for emergency`,
         to: 'whatsapp:+6285233333656'
         // to: 'whatsapp:+62'+no
@@ -133,13 +132,12 @@ function pushNotif(msgPushNotif){
 }
 
 
-function siteBuzzer(data){
-    payload=pos(data.site)+','+data.tma+','+data.status+','+data.kondisi
+function siteBuzzer(data,d,t){
+    payload=d+' 't+','+pos(data.site)+','+data.tma+','+data.status+','+data.kondisi
     clientMqtt.publish('siteWarningDps', payload)
     console.log('')
     console.log('Publish data Pos Buzzer: ',payload)
 }
-
 
 
 
@@ -163,7 +161,7 @@ var t = moment().add(7,'hours').format('HH:mm:ss');
     console.log(data)
 
 
-    pushNotif(payload)
+    pushNotif(payload,tBuzzer)
     sendWhatsappDef(data,d,t)
     siteBuzzer(data)
 
@@ -179,6 +177,7 @@ var t = moment().add(7,'hours').format('HH:mm:ss');
 socket.on('waDiseminasi',(msg)=>{
     var d = moment().add(7,'hours').format('YYYY/MM/DD');
     var t = moment().add(7,'hours').format('HH:mm:ss');  
+    var tBuzzer = moment().add(7,'hours').format('HH:mm');  
     var payload=msg.msgPayload
     console.log('payload')
 

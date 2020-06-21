@@ -4,8 +4,12 @@ var date = $('#dateReq').val();
 var optSite = $('#optSite').val();
 socket.emit('beranda',{status:'connect',date:date,site:optSite});
 $('#siteNameCok').text('KEDUNGGUPIT');
+
+if(datas[331].length>0){
 tabell(datas['331'],250,150,80,'KEDUNGGUPIT');
+}
 socket.on('berandaData',function(msg){
+    
     succReq()
     var stMd=msg.stMd;
     var optSite = $('#optSite').val();
@@ -28,11 +32,9 @@ $('#getBtn').click(function(){
 
 //Panel Last Data Table
 socket.on('newestDps',(data)=>{
-
+    console.log(data)
     var dataNewestDps=data.newestDps
     var siteData=data.siteData
-    
-
     plot(siteData,dataNewestDps)
     siteData.forEach((data)=>{
         var x = dataNewestDps.filter((x)=>{return x.site==data.site})[0]

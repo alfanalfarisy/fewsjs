@@ -38,10 +38,13 @@ block content
 								td.dtDps
 							tr: td TMA
 								td.KondTma
+								td.tma: td cm
 							tr: td CH
 								td.KondCh
+								td.ch: td mm
 							tr: td V Air
 								td.KondV
+								td.vair: td m/s
 							
 				.card.border-primary
 					.card-header LAST RECORD DPCD POS : 
@@ -51,17 +54,17 @@ block content
 							tr: td Datetime
 								td.dt
 							tr: td Lux
-								td.lx 
+								td.lx: td Lux
 							tr: td Suhu Logger
-								td.t
+								td.t: td C 
 							tr: td Sisa Kapasitas Baterai
-								td.skb
+								td.skb: td Jam
 							tr: td Estimasi Daya Baterai
-								td.edb
+								td.edb: td mAh
 							tr: td Daya solar panel
-								td.wps
-							tr: td Fungsi Daya solar panel
-								td.fwps
+								td.wps: td Watt
+							tr: td Index solar panel
+								td.inps
 
 						table.table.table-bordered
 							thead
@@ -71,15 +74,15 @@ block content
 							tbody
 								tr
 									td Panel Regulator
-									td.vpr
+									td.vpr  
 									td.ipr
 								tr
 									td Batterai Regulator
-									td.vbr
+									td.vbr 
 									td.ibr
 								tr
 									td Regulator Beban
-									td.vrl
+									td.vrl 
 									td.irl
 		
 		.card.border-primary
@@ -96,7 +99,7 @@ block content
 								td SKB
 								td EDB
 								td WPS
-								td FWPS
+								td inps
 								td VBR
 								td VPR
 								td VRL

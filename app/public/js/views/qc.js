@@ -63,7 +63,7 @@ function lastrecord(site,dpcd){
     $('.wps').text(data.wps[0])
     $('.skb').text(data.skb[0])
     $('.edb').text(data.edb[0])
-    $('.fwps').text(data.fwps[0])
+    $('.inps').text(data.inps[0])
     $('.vpr').text(data.vpr[0])
     $('.vbr').text(data.vbr[0])
     $('.vrl').text(data.vrl[0])
@@ -80,7 +80,7 @@ function updateDps(data,siteReq){
         $('.KondV').text(kondData(dps.vair[1]))
         $('.KondCh').text(kondData(dps.ch[1]))
         $('.tma').text(dps.tma[0])
-        $('.v').text(dps.vair[0])
+        $('.vair').text(dps.vair[0])
         $('.ch').text(dps.ch[0])
     }
 
@@ -98,7 +98,7 @@ socket.on('newestDps',(msg)=>{
 function tbl(data){
     var tbl;
     data.forEach(data=>{
-        tbl+= `<tr>
+        tbl+= `<tr class='remove'>
                     <td>${pos(data.site)}</td>
                     <td>${data.dt}</td>
                     <td>${data.lx[0]}</td>
@@ -106,7 +106,7 @@ function tbl(data){
                     <td>${data.skb[0]}</td>
                     <td>${data.edb[0]}</td>
                     <td>${data.wps[0]}</td>
-                    <td>${data.fwps[0]}</td>
+                    <td>${data.inps[0]}</td>
                     <td>${data.vbr[0]}</td>
                     <td>${data.vpr[0]}</td>
                     <td>${data.vrl[0]}</td>
@@ -119,6 +119,7 @@ function tbl(data){
 }
 
 socket.on('DataDpcd',(dpcd)=>{
+    $('.remove').remove()
     $('#tblContent').after(tbl(dpcd[siteReq]))
     if(dpcd[siteReq].length>0){
         chart(siteReq,dpcd);
