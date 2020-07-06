@@ -1,6 +1,7 @@
 var mqtt = require('mqtt');
 var mongoose = require('mongoose');
 var Topic = 'dpswwr'; 
+var moment = require('moment-timezone')
 // var Broker_URL = 'mqtt://test.mosquitto.org';
 var Broker_URL = 'mqtt://broker.mqttdashboard.com';
 var options = {
@@ -29,10 +30,10 @@ var dpsTempSchema = new Schema({
 	vair: [Number,Number],
 	ch: [Number,Number]
 
+	},
+	{
+		timestamps: true
 	}
-	// {
-		// timestamps: true
-	// }
 	);
 
 //MongoDB Config
@@ -90,7 +91,7 @@ function mqtt_messsageReceived(topic, message, packet) {
 	// Validasi Value Datetime
 	var dt=array[1];
 	if(dt){
-		var dt=dt.substring(0,4)+'-'+dt.substring(4,6)+'-'+dt.substring(6,8)+'T'+dt.substring(8,10)+':'+dt.substring(10,12)+':00'
+		var dt=dt.substring(0,4)+'-'+dt.substring(4,6)+'-'+dt.substring(6,8)+'T'+dt.substring(8,10)+':'+dt.substring(10,12)+':'+dt.substring(12,14)
 	} else {
 		dt = new Date();
 	}
@@ -108,8 +109,8 @@ function mqtt_messsageReceived(topic, message, packet) {
 
 	//Save Dokument to MongoDB
 	var dataToMongo = new DpsTemp({ 
-	  // dt: data.dt,
 	  dt: new Date(data.dt),
+	  // dt: moment().add(7,'hours'),
 	  site: data.st,
 	  tma: data.tma,
 	  vair: data.vair,
@@ -117,8 +118,8 @@ function mqtt_messsageReceived(topic, message, packet) {
 	});
 	if(data.st){
 		dataToMongo.save(function (err) {
-		  // if (err) return handleError(err);
-		  // console.log(err)
+		  if (err) return handleError(err);
+		  console.log(err)
 		  console.log("Data telah disimpan dalam database")
 	
 		});

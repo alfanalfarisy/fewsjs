@@ -41,7 +41,7 @@ socket.on('newestDps',(data)=>{
         $(`#${data.site}`).html(': '+statusTma(x.tma[0],data.th[0],data.th[1],data.th[2]))
     })
 
-    $('#dtUpdate').text(': '+dataNewestDps[0].dt.substring(0,16))
+    $('#dtUpdate').text(': '+dataNewestDps.filter((x)=>{return x.site==331})[0].dt.substring(0,16))
     
 
     $('#plotTabel').html(plotTabelLast(dataNewestDps,siteData))

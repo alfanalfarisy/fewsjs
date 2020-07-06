@@ -62,7 +62,8 @@ function decisionOn(){
     		// ichKtlm = ktlm6[0].ch[0] -ktlm6[ktlm6.length-1].ch[0]
     		// ichDpk = dpk6[0].ch[0] - dpk6[dpk6.length-1].ch[0]
     		// ichMgr = mgr6[0].ch[0] - mgr6[mgr6.length-1].ch[0]
-    		ichKdgpt = Kdgpt6[0].ch[0] - Kdgpt6[Kdgpt6.length-1].ch[0]
+    		// ichKdgpt = Kdgpt6[0].ch[0] - Kdgpt6[Kdgpt6.length-1].ch[0]
+    		ichKdgpt = kdgpt6[0].ch[0]
 
     		data=[{
     			// 'site' : 331,
@@ -99,7 +100,7 @@ function decisionOn(){
 				statusTma = (st,tma)=>{
 					return st==221 ? decisionTma(tma,300,200,80):
 					st==222 ? decisionTma(tma,200,150,80):
-					st==331 ? decisionTma(tma,300,200,80):
+					st==331 ? decisionTma(tma,250,150,80):
 					decisionTma(tma,200,150,80)
 				}
 				statusIch =(st)=>{
@@ -135,7 +136,7 @@ function decisionOn(){
 					  site: st,
 					  tma: tma,
 					  ch: data.ich,
-					  vair: ktlm1.vair[0],
+					  vair: kdgpt1.vair[0],
 					  kondisi: statusIch[1],
 					  status: statusTma[1]
 					});

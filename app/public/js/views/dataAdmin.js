@@ -50,7 +50,7 @@ socket.on('dataDpsReq',function(msg){
     console.log(msg)
     succReq()
     if(msg.resp.length==0){
-        alert("Data DPS tidak ditemukan!");
+        alert("Data Pengamatan Tidak Tersedia!");
     }
     if(msg!='connected'){
         dataDps=msg.resp
@@ -65,18 +65,23 @@ $('#btnSearchDpcd').click(function(){
     var ds = $("#startDateDpcd").val();
     var de = $("#endDateDpcd").val();
     socket.emit('reqSearchDpcd',{ds:ds,de:de,id:socket.id})
+    loadReq()
 
 })
 socket.on('DataDpcd',(data)=>{
+    succReq()
     // array=[data['331']]
     // var data = [].concat.apply([], array)
     // console.log(data[331])
     if(data[331].length>0){
         plotTblDpcd(data[331])
+    }else{
+        alert('Data Tidak di Tersedia!')
     }
 })
 
 socket.on('dataDpcdReq',(data)=>{
+    succReq()
     if(data.resp.length==0){
         alert("Data DPCD tidak ditemukan!");
     }

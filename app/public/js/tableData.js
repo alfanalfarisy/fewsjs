@@ -10,14 +10,14 @@ function plotTblDpcd(datasDpcd){
         skb=data.skb[0]
         edb=data.edb[0]
         wps=data.wps[0]
-        fwps=data.fwps[0]
+        inps=data.inps[0]
         vpr=data.vpr[0]
         vbr=data.vbr[0]
         vrl=data.vrl[0]
         ipr=data.ipr[0]
         ibr=data.ibr[0]
         irl=data.irl[0]
-        dataSet.push([st,dt,lx,t,skb,edb,wps,fwps,vpr,vbr,vrl,ipr,ibr,irl]);
+        dataSet.push([st,dt,lx,t,skb,edb,wps,inps,vpr,vbr,vrl,ipr,ibr,irl]);
         })
 
     $('.dataTableDpcd').DataTable( {
@@ -38,7 +38,7 @@ function plotTblDpcd(datasDpcd){
             { title: "skb" },
             { title: "edb" },
             { title: "wps" },
-            { title: "fwps" },
+            { title: "inps" },
             { title: "pr" },
             { title: "vbr" },
             { title: "vrl" },

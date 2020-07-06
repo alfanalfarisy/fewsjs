@@ -79,13 +79,13 @@ function mqtt_messsageReceived(topic, message, packet) {
 	//function QC
 	function qc(par,min,max){
 			return par=='' ? [-1,1001] :
-			par>min&&par<max ? [par,1000] :
+			par>=min&&par<=max ? [par,1000] :
 			[-1,1002]
 	}
 	// Validasi Value Datetime
 	var dt=array[1];
 	if(dt){
-		var dt=dt.substring(0,4)+'-'+dt.substring(4,6)+'-'+dt.substring(6,8)+'T'+dt.substring(8,10)+':'+dt.substring(10,12)+':00'
+		var dt=dt.substring(0,4)+'-'+dt.substring(4,6)+'-'+dt.substring(6,8)+'T'+dt.substring(8,10)+':'+dt.substring(10,12)+':'+dt.substring(12,14)
 	} else {
 		dt = new Date();
 	}
@@ -103,8 +103,8 @@ function mqtt_messsageReceived(topic, message, packet) {
 		'vpr': qc(array[8],0,30000),
 		'vbr': qc(array[9],0,30000),
 		'vrl': qc(array[10],0,30000),
-		'ipr': qc(array[11],0,30000),
-		'ibr': qc(array[12],0,30000),
+		'ibr': qc(array[11],0,30000),
+		'ipr': qc(array[12],0,30000),
 		'irl': qc(array[13],0,30000)	
 	}
 	console.log('proses pengendalian mutu data')
@@ -113,7 +113,7 @@ function mqtt_messsageReceived(topic, message, packet) {
 	//insert to MongoDB
 	var dataToMongo = new DpcdMain({ 
 	  site: data.st,
-	  dt: dt,
+	  dt: new Date(dt),
 	  lx: data.lx,
 	  t: data.t,
 	  skb: data.skb,
@@ -128,7 +128,7 @@ function mqtt_messsageReceived(topic, message, packet) {
 	  irl: data.irl
 	});
 	dataToMongo.save(function (err) {
-	  if (err) return handleError(err);
+	  // if (err) return handleError(err);
 	  console.log("data telah disimpan dalam basis data")
 
 	});

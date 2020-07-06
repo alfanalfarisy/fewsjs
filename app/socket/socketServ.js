@@ -62,7 +62,7 @@ var SttsValid=(socket)=>{
 var AllDpcd = (socket,site,start,end)=>{
     Promise.all([
         // DpcdMain.find({'site':site}).sort({'_id': -1}), 
-        DpcdMain.find({site:site,'dt':{$gte:start,$lte:end}}).sort({'_id': -1}), 
+        DpcdMain.find({site:site,'dt':{$gte:start,$lte:end}}).sort({'dt': -1}), 
     ]).then(result=>{
         const [resp]=result;
         

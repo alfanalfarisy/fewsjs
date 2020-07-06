@@ -1,18 +1,57 @@
 extends ../layout/base
 block content	
 	section.content
+		
 		.row
 			.col-md-8
-					.card.border-primary
-						.card-header: .text-center
-							strong CHART REALTIME TEGANGAN - WAKTU
-						.card-body
-							#vChart
-					.card.border-primary
-						.card-header: .text-center
-							strong CHART REALTIME ARUS - WAKTU
-						.card-body
-							#iChart
+				.row
+					.col-md-3.col-sm-3.col-3
+						.info-box
+							span.info-box-icon.bg-warning
+								i.fas.fa-car-battery
+							.info-box-content
+								span.info-box-text Sisa Baterai
+								span.info-box-number.skb
+								span %
+								span.description-percentage.text-success
+
+					.col-md-3.col-sm-3.col-3
+						.info-box
+							span.info-box-icon.bg-info
+								i.fas.fa-clock
+							.info-box-content
+								span.info-box-text Estimasi Baterai
+								span.info-box-number.edb
+								span Jam
+								span.description-percentage.text-success
+
+					.col-md-3.col-sm-3.col-3
+						.info-box
+							span.info-box-icon.bg-success
+								i.fas.fa-solar-panel
+							.info-box-content
+								span.info-box-text Index Panel Surya
+								span.info-box-number.inps
+								span.description-percentage.text-success
+					.col-md-3.col-sm-3.col-3
+						.info-box
+							span.info-box-icon.bg-success
+								i.fas.fa-temperature-high
+							.info-box-content
+								span.info-box-text Suhu Box Logger
+								span.info-box-number.t
+								span Celcius
+								span.description-percentage.text-success
+				.card.border-primary
+					.card-header: .text-center
+						strong CHART REALTIME TEGANGAN - WAKTU
+					.card-body
+						#vChart
+				.card.border-primary
+					.card-header: .text-center
+						strong CHART REALTIME ARUS - WAKTU
+					.card-body
+						#iChart
 
 			.col-md-4
 				.card.border-primary
@@ -58,9 +97,9 @@ block content
 							tr: td Suhu Logger
 								td.t: td C 
 							tr: td Sisa Kapasitas Baterai
-								td.skb: td Jam
+								td.skb: td %
 							tr: td Estimasi Daya Baterai
-								td.edb: td mAh
+								td.edb: td Jam
 							tr: td Daya solar panel
 								td.wps: td Watt
 							tr: td Index solar panel

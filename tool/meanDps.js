@@ -16,7 +16,7 @@ var dpsMainSchema = new Schema({
 //MongoDB Config
 var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
 // var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps');
-var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps_tes');
+var DpsMain = connection.model('DpsMain', dpsMainSchema,'main_dps');
 var DpsTemp = connection.model('DpsTemp', dpsMainSchema,'temp_dps');
 
 var socket = require('socket.io-client')('http://localhost:3000');
@@ -26,17 +26,17 @@ var mqtt = require('mqtt')
 var clientMqtt  = mqtt.connect('mqtt://broker.mqttdashboard.com')
 
 
-const st=[221,222,223,331]
+const st=[331]
 
 
 // Function Looping Every 10 Minute
-function mean(){
-	var start = moment().add(7,'hours').format();
+// function mean(){
+	var start = moment("2020-06-23 23:30:01").format();
 	var m = moment().minutes();
 
 	// if(m==40){
-	if(m==10||m==20||m==30|m==46||m==50||m==0){
-		var end = moment().add(7,'hours').subtract(10, 'minutes').format(); 	 	
+	// if(m==10||m==20||m==30|m==40||m==50||m==0){
+		var end = moment("2020-06-23 23:30:01").subtract(10, 'minutes').format(); 	 	
 		console.log('Range data data : ', [start,end])
 		console.log('Proses pengambilan nilai rata-rata 10 menit ...')
 		
@@ -110,6 +110,29 @@ function mean(){
 					ch: ch
 				});
 
+				var dataToMongo221 = new DpsMain({ 
+					dt: new Date(moment().add(7,'hours').format()),
+					site: 221,
+					tma: [100,1000],
+					vair: [1.3,1000],
+					ch: [0,1000]
+				});
+				var dataToMongo222 = new DpsMain({ 
+					dt: new Date(moment().add(7,'hours').format()),
+					site: 222,
+					tma: [100,1000],
+					vair: [1.3,1000],
+					ch: [0,1000]
+				});
+				var dataToMongo223 = new DpsMain({ 
+					dt: new Date(moment().add(7,'hours').format()),
+					site: 223,
+					tma: [100,1000],
+					vair: [1.3,1000],
+					ch: [0,1000]
+				});
+				
+
 				console.log('Penjumlahan TMA Valid :', sumTma)
 				console.log('total record TMA Valid :', tmaValid)
 				console.log('rata-rata TMA :', tma)
@@ -125,6 +148,15 @@ function mean(){
 						if (err) return handleError(err);
 						console.log("Data disimpan")
 					});
+					dataToMongo221.save(function (err) {
+						if (err) return handleError(err);
+					});
+					dataToMongo222.save(function (err) {
+						if (err) return handleError(err);
+					});
+					dataToMongo223.save(function (err) {
+						if (err) return handleError(err);
+					});
 			})
 
 		})
@@ -132,7 +164,7 @@ function mean(){
 	
 		setTimeout(()=>{socket.emit('meanDone', true)},500)
 
-	}
-}
-setInterval(mean,60000) //looping 10 minute
+	// }
+// }
+// setInterval(mean,60000) //looping 10 minute
 

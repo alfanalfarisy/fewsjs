@@ -35,6 +35,7 @@ function socket(io){
 		var end = new Date(moment().add(7,'hours').add(1, 'day').format('YYYY-MM-DD')); 
 
 		var stBeranda=331
+		siteDpcd = 331
 		var stSite;
 		SocketServ.newestDps(socket)		
 		SocketServ.sttsValid(socket)		
@@ -237,11 +238,11 @@ function socket(io){
 		})
 
 		socket.on('dpcdReq',(data)=>{
-			site=Number(data.site)
-			console.log(site)
+			siteDpcd=Number(data.site)
+			
 			var start = new Date(moment(data.date).add(7,'hours').format('YYYY-MM-DD'));
 			var end = new Date(moment(data.date).add(7,'hours').add(1, 'day').format('YYYY-MM-DD'));
-			SocketServ.allDpcd(socket,site,start,end)
+			SocketServ.allDpcd(socket,siteDpcd,start,end)
 		})
 
 
@@ -295,7 +296,7 @@ function socket(io){
 	        })
 		});
 		DpcdMainStream.on('change', (change) => {
-			SocketServ.allDpcd(socket,site,start,end)	
+			SocketServ.allDpcd(socket,siteDpcd,start,end)	
 		
 		});
 	});

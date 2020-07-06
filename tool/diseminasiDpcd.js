@@ -1,6 +1,6 @@
 const keys = require('../app/config/keys');
 const accountSid = 'ACfd59eb2e39864f41da9fa597bd98f871'; 
-const authToken = '23a598be854062dbc9eb9bf2ea54770b'; 
+const authToken = '956869913154159d25cb971e35030597'; 
 var moment = require('moment')
 const client = require('twilio')(accountSid, authToken);
 var mqtt = require('mqtt')
@@ -27,13 +27,10 @@ var t = moment().format('hh:mm:ss');
 function sendWhatsappDef(payload,no){
 	client.messages.create({
 		from: 'whatsapp:+14155238886',
-		body:  `Your Attention Required!
-		${payload}
-
-		code is 112 for emergency`,
+		body:  payload,
 		to: 'whatsapp:+6285233333656'
 	})
-	.then(message => console.log(message.sid)).done();
+	.then().done();
 }
 
 
@@ -62,11 +59,24 @@ function mean(){
 				1003:'down'
 			}
 
-message=`POS: Kedunggupit
-Dps: ${status[dpsWwr.tma[1]]}/${status[dpsWwr.ch[1]]}/${status[dpsWwr.vair[1]]}
-Update : ${moment(dpsWwr.dt).format("YYYY-MM-DD HH:mm:ss")}
-Dpcd : ${dpcdWwr.vbr[0]}/${dpcdWwr.vbr[0]}/${dpcdWwr.vrl}
-Update : ${moment(dpcdWwr.dt).format("YYYY-MM-DD HH:mm:ss")}`
+
+			pload=
+				dpcdWwr.site+','+moment(start).format("YYYY-MM-DD HH:mm:ss")+','+dpcdWwr.skb[0]+','+dpcdWwr.edb[0]+','+dpcdWwr.inps[0]+','+dpcdWwr.t[0]
+				// dpcdKtlmp.site+','+dpcdKtlmp.stc+','+dpcdKtlmp.dt.toString().substring(16,21)+','+dpcdKtlmp.vbr+','+
+				// dpcdDpk.site+','+dpcdDpk.stc+','+dpcdDpk.dt.toString().substring(16,21)+','+dpcdDpk.vbr+','+
+				// dpcdMgr.site+','+dpcdMgr.stc+','+dpcdMgr.dt.toString().substring(16,21)+','+dpcdMgr.vbr
+			message=`POS: Kedunggupit
+Data Pengamatan Sungai: 
+1. TMA: ${status[dpsWwr.tma[1]]}
+2. CH : ${status[dpsWwr.ch[1]]}
+3. V air :${status[dpsWwr.vair[1]]}
+Update : ${moment('2020-06-22 07:33:13').format("YYYY-MM-DD HH:mm:ss")}
+Dpcd Pengamatan Catu Daya: 
+1. SKB : ${dpcdWwr.skb[0]} % 
+2. EDB :${dpcdWwr.edb[0]} Jam
+3. Index PS :${dpcdWwr.inps[0]}
+3. Suhu :${dpcdWwr.t[0]} C
+Update : ${moment('2020-06-22 07:33:13').format("YYYY-MM-DD HH:mm:ss")}`
 // POS: Katlampa
 // Dps: ${status[dpsKtlmp.tma[1]]}/${status[dpsKtlmp.ch[1]]}/${status[dpsKtlmp.vair[1]]}
 // Update : ${dpsKtlmp.dt.toString().substring(0,21)}
@@ -86,12 +96,6 @@ Update : ${moment(dpcdWwr.dt).format("YYYY-MM-DD HH:mm:ss")}`
 // Update :${dpcdMgr.dt.toString().substring(0,21)}
 // console.log(dpcdWwr)
 
-			pload=
-				dpcdWwr.site+','+dpcdWwr.edb[0]+','+dpcdWwr.wps[0]+','+dpcdWwr.vbr[0]+','+dpcdWwr.vrl[0]+','+moment(dpsWwr.dt).format("YYYY-MM-DD HH:mm:ss")+','+dpcdWwr.vbr
-				// dpcdKtlmp.site+','+dpcdKtlmp.stc+','+dpcdKtlmp.dt.toString().substring(16,21)+','+dpcdKtlmp.vbr+','+
-				// dpcdDpk.site+','+dpcdDpk.stc+','+dpcdDpk.dt.toString().substring(16,21)+','+dpcdDpk.vbr+','+
-				// dpcdMgr.site+','+dpcdMgr.stc+','+dpcdMgr.dt.toString().substring(16,21)+','+dpcdMgr.vbr
-			
 			console.log("Publish ke Site Buzzer Teknisi: ")
 			console.log(pload)
 			clientMqtt.publish('siteWarningDpcd', pload)
@@ -100,12 +104,12 @@ Update : ${moment(dpcdWwr.dt).format("YYYY-MM-DD HH:mm:ss")}`
 			console.log("Diseminasi pesan whatsapp : ")
 			console.log(message)
 		
+			sendWhatsappDef(message)
 			users.forEach((user)=>{
 				no = user.no
-				// sendWhatsappDef(message,no)
 			})
 
 		})
 	// }
 }
-setInterval(mean,2000)
+setInterval(mean,5000)

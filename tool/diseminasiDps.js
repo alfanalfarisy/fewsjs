@@ -1,6 +1,6 @@
 const keys = require('../app/config/keys');
 const accountSid = 'ACfd59eb2e39864f41da9fa597bd98f871'; 
-const authToken = '23a598be854062dbc9eb9bf2ea54770b'; 
+const authToken = '956869913154159d25cb971e35030597'; 
 const client = require('twilio')(accountSid, authToken);
 var moment = require('moment-timezone')
 var mqtt = require('mqtt')
@@ -24,10 +24,9 @@ var dpsMainSchema = new Schema({
 });
 var usersSchema = new Schema({});
 var subsSchema = new Schema({});
-
 //MongoDB Config
-// var connection = mongoose.createConnection('mongodb://projek20:projek20@198.211.106.64:27017/siagabanjir',{useNewUrlParser: true,useUnifiedTopology: true});
-var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+var connection = mongoose.createConnection('mongodb://projek20:projek20@198.211.106.64:27017/siagabanjir',{useNewUrlParser: true,useUnifiedTopology: true});
+// var connection = mongoose.createConnection('mongodb://projek20:projek20@localhos/stiagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
 var DpsMain = connection.model('DpsMain', dpsMainSchema,'dpsMain');
 var Flood = connection.model('Flood', dpsMainSchema,'flood_rec');
 var Users = connection.model('Users', usersSchema,'users');
@@ -132,8 +131,8 @@ function pushNotif(msgPushNotif){
 }
 
 
-function siteBuzzer(data,d,t){
-    payload=d+' 't+','+pos(data.site)+','+data.tma+','+data.status+','+data.kondisi
+function siteBuzzer(data,tBuzzer){
+    payload=tBuzzer+','+pos(data.site)+','+data.tma+','+data.status+','+data.kondisi
     clientMqtt.publish('siteWarningDps', payload)
     console.log('')
     console.log('Publish data Pos Buzzer: ',payload)
@@ -144,6 +143,10 @@ function siteBuzzer(data,d,t){
 socket.on('diseminasiOn',(msg)=>{
 var d = moment().add(7,'hours').format('YYYY/MM/DD');
 var t = moment().add(7,'hours').format('HH:mm:ss');    
+var tBuzzer = moment().add(7,'hours').format('YYYY/MM/DD HH:mm');    
+
+// socket.on('diseminasiOn',(msg)=>{
+
     function msgPushNotif(data){
         msgPushNotif='Tanggal:'+d+'\n'+
         'Waktu:'+t+'\n'+
@@ -155,15 +158,15 @@ var t = moment().add(7,'hours').format('HH:mm:ss');
     }
     console.log('Diseminasi Running...')
 	var data = msg.data.data
-    var payload = msgPushNotif(msg.data.data)
+    var payload = msgPushNotif(data)
     
     console.log('Data akan didiseminasi: ')
     console.log(data)
 
 
-    pushNotif(payload,tBuzzer)
+    pushNotif(payload)
     sendWhatsappDef(data,d,t)
-    siteBuzzer(data)
+    siteBuzzer(data,tBuzzer)
 
     Users.find({}).lean().exec((err,resp)=>{
         resp.forEach((data)=>{
@@ -228,7 +231,3 @@ socket.on('pushNotif',(msg)=>{
         pushNotif(data)
     }
 })
-
-
-
-

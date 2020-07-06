@@ -119,15 +119,19 @@ function tbl(data){
 }
 
 socket.on('DataDpcd',(dpcd)=>{
+    succReq()
     $('.remove').remove()
     $('#tblContent').after(tbl(dpcd[siteReq]))
     if(dpcd[siteReq].length>0){
         chart(siteReq,dpcd);
         lastrecord(siteReq,dpcd);
+    }else{
+        alert('Data Kosong')
     }
 })
 
     $('#getBtn').click(()=>{
+        loadReq()
         siteReq= $('#optSite').val()
         socket.emit('dpcdReq',{date:$('#dateReq').val(),site:siteReq})
     })

@@ -8,7 +8,11 @@ db.getSiblingDB("siagabanjir").shutdownServer()
 
 db.grantRolesToUser('projek20', [{ role: 'root', db: 'siagabanjir' }])
 
-db.auth('projek20','projek20')
+	use admin
+	db.auth('projek20','projek20')
+	use siagabanjir
+  db.main_dpcd.find({'dt':{$gte:new Date('2020-07-05T12:00:00Z'),$lte:new Date('2020-07-05T21:00:00Z')}}).count()
+	db.temp_dps.find({'dt':{$gte:new Date('2020-07-04T11:00:00Z'),$lte:new Date('2020-07-04T14:30:00Z')}}).count()
  db.grantRolesToUser("User", [ { role: "readwrite", db: "siagabanjir" } ])
 db.createUser(
   {
@@ -17,3 +21,11 @@ db.createUser(
     roles: [ { role: "root", db: "admin" } ]
   }
 )
+db.shutdownServer({
+  force: true,
+})
+
+db.temp_dps.find({'dt':{$gte:new ISODate('2020-07-04T11:00:00Z'),$lte:new ISODate('2020-07-04T14:30:00Z')}})
+
+console.log(new Date(new Date('2020-07-05').setHours(00,00,00)))
+

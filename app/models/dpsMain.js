@@ -14,8 +14,8 @@ var DpsMainSchema = new Schema({
 		timestamps: true
 	});
 
-var DpsMain = mongoose.model('DpsMain', DpsMainSchema, 'main_dps');
-// var DpsMain = mongoose.model('DpsMain', DpsMainSchema, 'main_dps');
+var DpsMain = mongoose.model('DpsMain', DpsMainSchema, 'main_dps_tes');
+// var DpsMain = mongoose.model('DpsMain', DpsMainSchema, 'temp_dps');
 
 module.exports = DpsMain;
 
