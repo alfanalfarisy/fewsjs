@@ -76,6 +76,25 @@ $('#btnWaDefault').click(()=>{
     socket.emit('waNotif',dataDefault),
     alert('Broadcast Success!')
 
+})$
+('#btnTeleDefault').click(()=>{
+    fncDataInput()
+    title = 'Warning'
+    msgPayload = {
+                'pos': dataInput.siteOpt, 
+                'status': dataInput.statusOpt,
+                'kondisi': dataInput.ichOpt,
+                'tma' : dataInput.inputTma,
+                'ich': dataInput.inputIch}
+    dataDefault={
+        'type'  : 'default',
+        'msgTitle' : title,
+        'msgPayload' : msgPayload
+    }
+    dataInput.inputTma=='' || dataInput.inputIch=='' ? 
+    alert('form kosong') : 
+    socket.emit('teleNotif',dataDefault),
+    alert('Broadcast Success!')
 })
 $('#btnPublishDefault').click(()=>{
     socket.emit('publishWarning',dataInput)

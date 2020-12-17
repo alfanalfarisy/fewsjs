@@ -189,7 +189,7 @@ function socket(io){
 			var site=msg.site
 			var siteOpt=(site)=>{return site=='all' ? [221,222,223,331] : [Number(site)]}
 			var sc = siteOpt(site)
-			console.log(sc)
+			// console.log(sc)
 			var de = new Date(moment(msg.de))
 			var ds = new Date(moment(msg.ds))
 			var reqPar = msg.vc+'.0'
@@ -252,7 +252,7 @@ function socket(io){
 		socket.on('publishWarning',function(data){
 			var msg=[data.siteOpt,data.statusOpt,data.ichOpt]
 			msg = msg.toString()
-			console.log(msg)
+			// console.log(msg)
 			client.publish('dpsWarning',msg)
 		})
 
@@ -268,8 +268,12 @@ function socket(io){
 
 		})
 		socket.on('waNotif',(msg)=>{
-			console.log(msg)
+			// console.log(msg)
 			io.emit('waDiseminasi',msg)
+		})
+		socket.on('teleNotif',(msg)=>{
+			// console.log(msg)
+			io.emit('teleNotifDefault',(msg))
 		})
 		socket.on('pushNotif',(msg)=>{
 			io.emit('pushNotif',(msg))
@@ -277,6 +281,13 @@ function socket(io){
 
 		socket.on('sttsValid',(data)=>{
 			stSite=data.siteReq
+		})
+		socket.on('publishDpsToBot',(data)=>{
+			io.emit('publishDpsToBot',data)
+			console.log('SUKSESSSS')
+		})
+		socket.on('publishDpcdToBot',(data)=>{
+			io.emit('publishDpcdToBot',data)
 		})
 		
 		DpsMainStream.on('change', (change) => {

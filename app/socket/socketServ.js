@@ -69,7 +69,7 @@ var AllDpcd = (socket,site,start,end)=>{
         var data={
             [site] : resp,
         }
-        console.log(data)
+        // console.log(data)
         socket.emit('DataDpcd',data)
     })
 }

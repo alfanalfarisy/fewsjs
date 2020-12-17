@@ -1,6 +1,6 @@
 const keys = require('../app/config/keys');
 const accountSid = 'ACfd59eb2e39864f41da9fa597bd98f871'; 
-const authToken = '956869913154159d25cb971e35030597'; 
+const authToken = 'e13b35595cea49159e276e1f54e92af9'; 
 const client = require('twilio')(accountSid, authToken);
 var moment = require('moment-timezone')
 var mqtt = require('mqtt')
@@ -25,8 +25,8 @@ var dpsMainSchema = new Schema({
 var usersSchema = new Schema({});
 var subsSchema = new Schema({});
 //MongoDB Config
-var connection = mongoose.createConnection('mongodb://projek20:projek20@198.211.106.64:27017/siagabanjir',{useNewUrlParser: true,useUnifiedTopology: true});
-// var connection = mongoose.createConnection('mongodb://projek20:projek20@localhos/stiagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+// var connection = mongoose.createConnection('mongodb://projek20:projek20@198.211.106.64:27017/siagabanjir',{useNewUrlParser: true,useUnifiedTopology: true});
+var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
 var DpsMain = connection.model('DpsMain', dpsMainSchema,'dpsMain');
 var Flood = connection.model('Flood', dpsMainSchema,'flood_rec');
 var Users = connection.model('Users', usersSchema,'users');
@@ -49,8 +49,8 @@ function sendWhatsappDef(payload,d,t,no){
     client.messages.create({
         from: 'whatsapp:+14155238886',
         body:  `Your Attention Required!-----Tanggal:${d}----Waktu:${t}----Pos:${pos(payload.site)}---Status:${payload.status}---Kondisi:${payload.kondisi}---TMA:${payload.tma} cm----ICH:${payload.ich} mm---- code is 112 for emergency`,
-        to: 'whatsapp:+6285233333656'
-        // to: 'whatsapp:+62'+no
+        // to: 'whatsapp:+6285233333656'
+        to: `whatsapp:+62${no}`
     })
     .then((message) => 
         {
@@ -124,7 +124,7 @@ function pushNotif(msgPushNotif){
                 });
             });
             q.allSettled(parallelSubscriptionCalls).then((pushResults) => {
-                // console.info(pushResults);
+                console.info(pushResults);
             });
         }
     });
@@ -133,7 +133,7 @@ function pushNotif(msgPushNotif){
 
 function siteBuzzer(data,tBuzzer){
     payload=tBuzzer+','+pos(data.site)+','+data.tma+','+data.status+','+data.kondisi
-    clientMqtt.publish('siteWarningDps', payload)
+    clientMqtt.publish('sbbwwr', payload)
     console.log('')
     console.log('Publish data Pos Buzzer: ',payload)
 }
@@ -141,38 +141,37 @@ function siteBuzzer(data,tBuzzer){
 
 
 socket.on('diseminasiOn',(msg)=>{
-var d = moment().add(7,'hours').format('YYYY/MM/DD');
-var t = moment().add(7,'hours').format('HH:mm:ss');    
-var tBuzzer = moment().add(7,'hours').format('YYYY/MM/DD HH:mm');    
-
-// socket.on('diseminasiOn',(msg)=>{
-
-    function msgPushNotif(data){
-        msgPushNotif='Tanggal:'+d+'\n'+
-        'Waktu:'+t+'\n'+
-        'Pos:'+pos(data.site)+'\n'+
-        `Kondisi: ${data.kondisi} (${data.ich} mm)\n` +
-        `Status: ${data.status} (${data.tma} mm)\n`
-
-        return msgPushNotif
-    }
-    console.log('Diseminasi Running...')
-	var data = msg.data.data
-    var payload = msgPushNotif(data)
-    
-    console.log('Data akan didiseminasi: ')
-    console.log(data)
+    var d = moment().add(7,'hours').format('YYYY/MM/DD');
+    var t = moment().add(7,'hours').format('HH:mm:ss');    
+    var tBuzzer = moment().add(7,'hours').format('YYYY/MM/DD HH:mm');    
 
 
-    pushNotif(payload)
-    sendWhatsappDef(data,d,t)
-    siteBuzzer(data,tBuzzer)
+        function msgPushNotif(data){
+            msgPushNotif='Tanggal:'+d+'\n'+
+            'Waktu:'+t+'\n'+
+            'Pos:'+pos(data.site)+'\n'+
+            `Kondisi: ${data.kondisi} (${data.ich} mm)\n` +
+            `Status: ${data.status} (${data.tma} mm)\n`
 
-    Users.find({}).lean().exec((err,resp)=>{
-        resp.forEach((data)=>{
-            // no = data.no
+            return msgPushNotif
+        }
+        console.log('Diseminasi Running...')
+    	var data = msg.data.data
+        var payload = msgPushNotif(data)
+        
+        console.log('Data akan didiseminasi: ')
+        console.log(data)
+
+        pushNotif(payload)
+        siteBuzzer(data,tBuzzer)
+
+
+        Users.find({}).lean().exec((err,resp)=>{
+            resp.forEach((dataUser)=>{
+                no = dataUser.no
+                sendWhatsappDef(data,d,t,no)
+            })
         })
-    })
 
 })
 
@@ -187,25 +186,28 @@ socket.on('waDiseminasi',(msg)=>{
     function sendWhatsappCustom(no){
         client.messages.create({
             from: 'whatsapp:+14155238886',
-            body: `Your Attention Required!......
-            ${payload}
-            ....... code is 112 for emergency`,
-            to: 'whatsapp:+6285233333656'
+            body: `Your Attention Required!......${payload}....... code is 112 for emergency`,
+            to: `whatsapp:+62${no}`
         })
         .then(message => console.log('Pesan Whatsapp\n',message.sid)).done();
     }
     if(msg.type=='default'){
-        sendWhatsappDef(payload,d,t)
-    }else{
-        sendWhatsappCustom()
-    }
-
-    Users.find({}).lean().exec((err,resp)=>{
-        resp.forEach((data)=>{
-            // no = data.no.substring(1,12)
-            // sendWhatsappDef(no)
+        Users.find({}).lean().exec((err,resp)=>{
+            resp.forEach((data)=>{
+                no = data.no
+                console.log(no)
+                sendWhatsappDef(data,d,t,no)
+            })
         })
-    })
+    }else{
+        Users.find({}).lean().exec((err,resp)=>{
+            resp.forEach((data)=>{
+                no = data.no
+                console.log(no)
+                sendWhatsappCustom(no)
+            })
+        })
+    }
 })
 
 //Push Notif Manual
@@ -226,8 +228,12 @@ socket.on('pushNotif',(msg)=>{
     console.log('Push Notif manual Running')
     if(msg.type=='custom'){
         pushNotif(msg.msgPayload)
+        console.log('OK')
     }else{
         data=msgPushNotif(msg.msgPayload)
         pushNotif(data)
+        console.log('OK')
     }
 })
+
+

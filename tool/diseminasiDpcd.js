@@ -1,6 +1,6 @@
 const keys = require('../app/config/keys');
 const accountSid = 'ACfd59eb2e39864f41da9fa597bd98f871'; 
-const authToken = '956869913154159d25cb971e35030597'; 
+const authToken = 'e13b35595cea49159e276e1f54e92af9'; 
 var moment = require('moment')
 const client = require('twilio')(accountSid, authToken);
 var mqtt = require('mqtt')
@@ -13,7 +13,8 @@ var dpcdMainSchema = new Schema({});
 var dpsMainSchema = new Schema({});
 var usersSchema = new Schema({});
 var subsSchema = new Schema({});
-var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+var connection = mongoose.createConnection('mongodb://projek20:projek20@198.211.106.64:27017/siagabanjir',{useNewUrlParser: true,useUnifiedTopology: true});
+// var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
 var Dpcd = connection.model('DpcdMain', dpcdMainSchema,'main_dpcd');
 var Dps = connection.model('DpsMain', dpsMainSchema,'main_dps');
 var Users = connection.model('Users', usersSchema,'users');
@@ -28,16 +29,16 @@ function sendWhatsappDef(payload,no){
 	client.messages.create({
 		from: 'whatsapp:+14155238886',
 		body:  payload,
-		to: 'whatsapp:+6285233333656'
+		to: 'whatsapp:+62'+no
 	})
 	.then().done();
 }
 
 
-function mean(){
+// function mean(){
 	var start = moment().add(7,"hours").format();
 	var m = moment().add(7,"hours").minutes();
-
+	datex= new Date('2020-06-21');
 	// if(m==0){
 	Promise.all([
 		Users.find({'admin' : true}).lean(),
@@ -59,9 +60,8 @@ function mean(){
 				1003:'down'
 			}
 
-
 			pload=
-				dpcdWwr.site+','+moment(start).format("YYYY-MM-DD HH:mm:ss")+','+dpcdWwr.skb[0]+','+dpcdWwr.edb[0]+','+dpcdWwr.inps[0]+','+dpcdWwr.t[0]
+				dpcdWwr.site+','+moment(dpcdWwr.dt).format("YYYY-MM-DD HH:mm:ss")+','+dpcdWwr.lx[0]+','+dpcdWwr.t[0]+','+dpcdWwr.skb[0]+','+dpcdWwr.edb[0]+','+dpcdWwr.wps[0]+','+dpcdWwr.inps[0]+','+dpcdWwr.vpr[0]+','+dpcdWwr.vbr[0]+','+dpcdWwr.vrl[0]+','+dpcdWwr.ipr[0]+','+dpcdWwr.ibr[0]+','+dpcdWwr.irl[0]
 				// dpcdKtlmp.site+','+dpcdKtlmp.stc+','+dpcdKtlmp.dt.toString().substring(16,21)+','+dpcdKtlmp.vbr+','+
 				// dpcdDpk.site+','+dpcdDpk.stc+','+dpcdDpk.dt.toString().substring(16,21)+','+dpcdDpk.vbr+','+
 				// dpcdMgr.site+','+dpcdMgr.stc+','+dpcdMgr.dt.toString().substring(16,21)+','+dpcdMgr.vbr
@@ -70,13 +70,13 @@ Data Pengamatan Sungai:
 1. TMA: ${status[dpsWwr.tma[1]]}
 2. CH : ${status[dpsWwr.ch[1]]}
 3. V air :${status[dpsWwr.vair[1]]}
-Update : ${moment('2020-06-22 07:33:13').format("YYYY-MM-DD HH:mm:ss")}
+Update : ${moment(dpsWwr.dt).format("YYYY-MM-DD HH:mm:ss")}
 Dpcd Pengamatan Catu Daya: 
 1. SKB : ${dpcdWwr.skb[0]} % 
 2. EDB :${dpcdWwr.edb[0]} Jam
 3. Index PS :${dpcdWwr.inps[0]}
 3. Suhu :${dpcdWwr.t[0]} C
-Update : ${moment('2020-06-22 07:33:13').format("YYYY-MM-DD HH:mm:ss")}`
+Update : ${moment(dpcdWwr.dt).format("YYYY-MM-DD HH:mm:ss")}`
 // POS: Katlampa
 // Dps: ${status[dpsKtlmp.tma[1]]}/${status[dpsKtlmp.ch[1]]}/${status[dpsKtlmp.vair[1]]}
 // Update : ${dpsKtlmp.dt.toString().substring(0,21)}
@@ -98,18 +98,20 @@ Update : ${moment('2020-06-22 07:33:13').format("YYYY-MM-DD HH:mm:ss")}`
 
 			console.log("Publish ke Site Buzzer Teknisi: ")
 			console.log(pload)
-			clientMqtt.publish('siteWarningDpcd', pload)
+			clientMqtt.publish('sbtwwr', pload)
 			
 			console.log(" ")
 			console.log("Diseminasi pesan whatsapp : ")
 			console.log(message)
 		
-			sendWhatsappDef(message)
 			users.forEach((user)=>{
 				no = user.no
+				sendWhatsappDef(message,no)
 			})
 
+		}).catch(err=>{
+			console.log(err)
 		})
 	// }
-}
-setInterval(mean,5000)
+// }
+// setInterval(mean,1000)

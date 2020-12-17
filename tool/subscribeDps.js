@@ -28,11 +28,11 @@ var dpsTempSchema = new Schema({
 	site: Number,
 	tma: [Number,Number],
 	vair: [Number,Number],
-	ch: [Number,Number]
+	ch: [Number,Number],
 
 	},
 	{
-		timestamps: true
+		timestamp: true,
 	}
 	);
 
@@ -90,12 +90,13 @@ function mqtt_messsageReceived(topic, message, packet) {
 
 	// Validasi Value Datetime
 	var dt=array[1];
+	console.log(dt)
 	if(dt){
 		var dt=dt.substring(0,4)+'-'+dt.substring(4,6)+'-'+dt.substring(6,8)+'T'+dt.substring(8,10)+':'+dt.substring(10,12)+':'+dt.substring(12,14)
 	} else {
 		dt = new Date();
 	}
-
+	console.log(dt)
 	//Dokumen DPS 
 	var data={	
 		'st': st,
@@ -114,7 +115,7 @@ function mqtt_messsageReceived(topic, message, packet) {
 	  site: data.st,
 	  tma: data.tma,
 	  vair: data.vair,
-	  ch: data.ch
+	  ch: data.ch,
 	});
 	if(data.st){
 		dataToMongo.save(function (err) {

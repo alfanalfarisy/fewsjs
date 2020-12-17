@@ -84,12 +84,10 @@ function plotMap(pos,site,lat,long,tma,vair,ch,colorIcon){
         });
 }
 
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', 
+L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
 {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
-    id: 'mapbox.streets',
-    accessToken: 'pk.eyJ1IjoicHJvamVrMjAiLCJhIjoiY2sxMXM5aW51MDR4NjNkcDlxYzBuOXNwdyJ9.0i-0Ypvu2ZF5_fHY2ktyvw'
 }).addTo(mymap);
 $('.leaflet-control-attribution').hide()
 function plot(siteDatas,lastDatas){

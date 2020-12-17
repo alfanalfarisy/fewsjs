@@ -33,8 +33,8 @@ function socket(io){
 	router.get('/', function(req, res, next) {		
 		session_store = req.session;
 		title='FEWS | HOME'
-		console.log(start)
-		console.log(end)
+		// console.log(start)
+		// console.log(end)
 				Promise.all([
 					DpsMain.find({}).sort({'dt':1}).limit(1),
 					DpsMain.find({}).sort({'dt':-1}).limit(1),
@@ -74,7 +74,7 @@ function socket(io){
 	router.get('/cok', function(req, res, next) {		
 		title='FEWS | Loc'
 		DataSite.find({},(err,resp)=>{
-			console.log(resp)
+			// console.log(resp)
 			res.render('loc',{title:title,siteData:resp});
 
 		})
@@ -91,7 +91,7 @@ function socket(io){
 	router.get('/warning', function(req, res, next) {
 	  title='FEWS | WARNING'
 	  FloodRecord.findOne({}).sort({'dt':-1}).lean().exec((err,result)=>{
-			console.log(result)
+			// console.log(result)
 			res.render('warning',{title:title,data:JSON.stringify(result)});
 	  })
 	});
@@ -110,7 +110,7 @@ function socket(io){
 				'dps':dps,
 				'dataSite':dataSite
 			}
-			console.log(dataSite)
+			// console.log(dataSite)
 			res.render('dataDps',{title:title,session_store:session_store, results:JSON.stringify(data),dataSite:dataSite});
 		})
 	});
