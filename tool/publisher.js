@@ -59,10 +59,12 @@ function generateDt(){
 	h < 10 ? h='0'+h : h
 	m=moment().minutes()
 	m < 10 ? m='0'+m : m
+	s=moment().seconds()
+	s < 10 ? s='0'+s : s
 }
 
 function publish(){
-	st=[221,222,223,331]
+	st=[221]
 	generateDt()
 
 	st.forEach((st)=>{
@@ -70,7 +72,7 @@ function publish(){
 		dbt=Math.floor(Math.random() * 3) + 0
 		ch=Math.floor(Math.random() * 30) + 0
 		
-		payloadDps=`${st},${y}${b}${d}${h}${m}00,${tma},${dbt},${ch}`
+		payloadDps=`${st},${y}${b}${d}${h}${m}${s},${tma},${dbt},${ch}`
 		client.publish('dpswwr',payloadDps)
 		console.log(`Publish Data :`)
 		console.log(payloadDps)
@@ -89,7 +91,7 @@ function publishDpcd(){
 		socket.emit('publishDpcdToBot', payloadDpcd);		
 	})
 }
-setInterval(publish,120000)
+setInterval(publish,10000)
 setInterval(publishDpcd,600000)
 
 

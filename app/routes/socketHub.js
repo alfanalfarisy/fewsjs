@@ -22,7 +22,7 @@ var moment = require('moment-timezone');
 function socket(io){
 
 	// mqtt
-	client.subscribe('cokcokcok');
+	// client.subscribe('cokcokcok');
 	client.on('message', mqtt_messsageReceived);
 	function mqtt_messsageReceived(topic, message, packet) {
 		var data=message.toString();
@@ -149,6 +149,7 @@ function socket(io){
 	        });
 		})
 
+		
 		
 		socket.on('beranda', function(msg){
 			stBeranda=Number(msg.site)
@@ -284,7 +285,7 @@ function socket(io){
 		})
 		socket.on('publishDpsToBot',(data)=>{
 			io.emit('publishDpsToBot',data)
-			console.log('SUKSESSSS')
+			// console.log('SUKSESSSS')
 		})
 		socket.on('publishDpcdToBot',(data)=>{
 			io.emit('publishDpcdToBot',data)

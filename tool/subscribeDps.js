@@ -37,7 +37,8 @@ var dpsTempSchema = new Schema({
 	);
 
 //MongoDB Config
-var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+// var connection = mongoose.createConnection('mongodb://projek20:projek20@localhost/siagabanjir?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
+var connection = mongoose.createConnection('mongodb://localhost/projekiot?replicaSet=rs0',{useNewUrlParser: true,useUnifiedTopology: true});
 var DpsTemp = connection.model('DpsTemp', dpsTempSchema,'temp_dps');
 
 function mqtt_connect() {

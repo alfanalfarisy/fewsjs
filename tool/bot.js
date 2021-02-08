@@ -127,16 +127,21 @@ bot.on('message', (msg) => {
 })
 bot.on('polling_error', error => console.log(error))
 
-socket.on('publishDpsToBot',(data)=>{
+// socket.on('publishDpsToBot',(data)=>{
+//   // console.log(data)
+//   Bot_subs.find({'subs.dps':true}).lean().exec((err,res)=>{
+//     res.forEach((res)=>{
+//       bot.sendMessage(res.id, `Data DPS: ${data}`);
+//       console.log('successdpcd')
+//     })
+//   })
 
-  Bot_subs.find({'subs.dps':true}).lean().exec((err,res)=>{
-    res.forEach((res)=>{
-      bot.sendMessage(res.id, `Data DPS: ${data}`);
-      console.log('successdpcd')
-    })
-  })
+// })
 
+socket.on('publishDpsToBot',msg => {
+    console.log(msg)
 })
+
 socket.on('publishDpcdToBot',(data)=>{
 Bot_subs.find({'subs.dpcd':true}).lean().exec((err,res)=>{
     res.forEach((res)=>{
